@@ -1,20 +1,30 @@
 import React, { useState, useEffect } from "react";
 
 const AssignmentModal = ({ show, onClose, onSubmit, initialData = {} }) => {
-  // Use initialData if editing; otherwise start empty.
-  const [course, setCourse] = useState(initialData.course || "");
-  const [assignment, setAssignment] = useState(initialData.assignment || "");
-  const [dueDate, setDueDate] = useState(initialData.dueDate || "");
-  const [description, setDescription] = useState(initialData.description || "");
+  // Destructure initial values with defaults
+  const {
+    course: initialCourse = "",
+    assignment: initialAssignment = "",
+    dueDate: initialDueDate = "",
+    description: initialDescription = "",
+  } = initialData;
+
+  const [course, setCourse] = useState(initialCourse);
+  const [assignment, setAssignment] = useState(initialAssignment);
+  const [dueDate, setDueDate] = useState(initialDueDate);
+  const [description, setDescription] = useState(initialDescription);
   const [imageFile, setImageFile] = useState(null);
 
-  // Update fields if initialData changes (e.g. when switching to edit mode)
+  // When the modal opens, initialize state only once.
   useEffect(() => {
-    setCourse(initialData.course || "");
-    setAssignment(initialData.assignment || "");
-    setDueDate(initialData.dueDate || "");
-    setDescription(initialData.description || "");
-  }, [initialData]);
+    if (show) {
+      setCourse(initialCourse);
+      setAssignment(initialAssignment);
+      setDueDate(initialDueDate);
+      setDescription(initialDescription);
+      setImageFile(null);
+    }
+  }, [show, initialCourse, initialAssignment, initialDueDate, initialDescription]);
 
   if (!show) return null;
 
