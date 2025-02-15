@@ -13,64 +13,80 @@ const Navbar = ({
   const { user, logout } = useAuth();
 
   return (
-    <nav className="bg-gradient-to-r from-blue-800 to-blue-700 shadow-md py-4">
+    <nav className="bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 shadow-2xl py-4 border-b border-blue-800/50">
       <div className="container mx-auto flex items-center justify-between px-6">
-        {/* Logo */}
-        <div className="text-white font-semibold text-2xl">
-          University Companion
+        {/* Logo with hover effect */}
+        <div className="group flex items-center space-x-2">
+          <span className="text-white font-bold text-2xl tracking-tight bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent transition-all duration-300 group-hover:bg-gradient-to-l">
+            University Companion
+          </span>
         </div>
 
-        {/* Search Bar */}
-        <div className="relative flex-1 mx-6">
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full py-2 pl-4 pr-10 rounded-full bg-blue-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 shadow-sm"
-          />
-          <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
-            <svg
-              className="h-5 w-5 text-blue-400"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fillRule="evenodd"
-                d="M12.9 14.32a8 8 0 111.414-1.414l4.387 4.387a1 1 0 01-1.414 1.414l-4.387-4.387zM8 14A6 6 0 108 2a6 6 0 000 12z"
-                clipRule="evenodd"
-              />
-            </svg>
+        {/* Search Bar with glassmorphism effect */}
+        <div className="relative flex-1 mx-8 max-w-2xl">
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search courses, materials..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full py-2.5 pl-5 pr-12 rounded-xl bg-white/5 backdrop-blur-sm border border-blue-800/30 focus:outline-none focus:ring-2 focus:ring-cyan-400/30 focus:border-cyan-400/50 text-gray-200 placeholder-blue-200/50 transition-all duration-300 shadow-lg"
+            />
+            <div className="absolute inset-y-0 right-0 flex items-center pr-5 pointer-events-none">
+              <svg
+                className="h-5 w-5 text-cyan-400/80"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </div>
           </div>
         </div>
 
-        {/* Account Section */}
-        <div className="flex items-center space-x-4">
+        {/* Account Section with refined buttons */}
+        <div className="flex items-center space-x-3">
           {user ? (
             <>
-              <span className="text-gray-300 font-medium">{user.email}</span>
-              <button
-                onClick={logout}
-                className="px-4 py-2 border border-blue-500 text-white rounded-full hover:bg-gray-600 transition"
-              >
-                Logout
-              </button>
+              <div className="flex items-center space-x-3">
+                <div className="flex flex-col items-end">
+                  <span className="text-sm font-medium text-cyan-100">
+                    {user.name || user.email}
+                  </span>
+                  <span className="text-xs text-cyan-400/80 font-light">
+                    Student Account
+                  </span>
+                </div>
+                <button
+                  onClick={logout}
+                  className="px-4 py-2.5 bg-gradient-to-r from-cyan-500/90 to-blue-600/90 hover:from-cyan-400/90 hover:to-blue-500/90 text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-cyan-500/20 active:scale-95"
+                >
+                  Logout
+                </button>
+              </div>
             </>
           ) : (
-            <>
+            <div className="flex space-x-3">
               <button
                 onClick={onAccountCreationClick}
-                className="px-4 py-2 border border-blue-500 text-white rounded-full hover:bg-gray-600 transition"
+                className="px-4 py-2.5 bg-gradient-to-r from-blue-600/90 to-cyan-600/90 hover:from-blue-500/90 hover:to-cyan-500/90 text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-cyan-500/20 active:scale-95"
               >
                 Create Account
               </button>
               <button
                 onClick={onLoginClick}
-                className="px-4 py-2 border border-blue-500 text-white rounded-full hover:bg-gray-600 transition"
+                className="px-4 py-2.5 border border-cyan-500/30 bg-slate-900/50 hover:bg-slate-900/70 text-cyan-100 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-cyan-500/10 active:scale-95"
               >
                 Login
               </button>
-            </>
+            </div>
           )}
         </div>
       </div>
