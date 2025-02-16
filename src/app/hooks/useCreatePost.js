@@ -54,13 +54,13 @@ const useCreatePost = () => {
           imageInfo = '';
         }
       }
-
+      console.log('Image Info:', user);
       // Save the post to Firestore, including the image Base64 data and OCR text.
       await addDoc(collection(db, 'posts'), {
         content,
         imageBase64,  // Base64-encoded image.
         imageInfo,    // OCR extracted text from the image.
-        author: user.displayName || user.email,
+        author: user.username || user.email,
         authorPhotoURL: user.photoURL || '',
         userId: user.uid,
         likes: [],

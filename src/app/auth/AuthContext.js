@@ -1,7 +1,8 @@
 "use client";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { auth } from "../auth/firebaseConfig"; // Firebase auth instance
+import { auth, db } from "../auth/firebaseConfig"; // Firebase auth and Firestore instance
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 // Create AuthContext
 const AuthContext = createContext();
@@ -12,8 +13,19 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     // Firebase listener to track auth state
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser); // Update state when user logs in/out
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        // Fetch additional user information from Firestore
+        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setUser({ ...currentUser, ...userData }); // Update state with additional user data
+        } else {
+          setUser(currentUser); // If no additional data, just set the current user
+        }
+      } else {
+        setUser(null); // No user is logged in
+      }
     });
 
     return () => unsubscribe(); // Cleanup

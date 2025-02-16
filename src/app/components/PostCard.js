@@ -13,7 +13,7 @@ const PostCard = ({ post }) => {
   const [isLiked, setIsLiked] = useState(post.likes.includes(user?.uid));
   const { toggleLike, addComment, isProcessing } = usePostActions(post.id);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
-
+  console.log(post);
   const handleLike = async () => {
     if (!user) {
       setShowLoginPrompt(true);

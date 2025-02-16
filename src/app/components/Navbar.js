@@ -15,7 +15,7 @@ const Navbar = ({
   const { posts: searchResults, loading } = useSearchPosts(searchTerm);
 
   return (
-    <nav className="bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 shadow-2xl py-4 border-b border-blue-800/50">
+    <nav className="fixed top-0 left-0 right-0 bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 shadow-2xl py-4 border-b border-blue-800/50 z-50">
       <div className="container mx-auto flex items-center justify-between px-6 relative">
         {/* Logo */}
         <div className="group flex items-center space-x-2">

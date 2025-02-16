@@ -37,16 +37,17 @@ export default function Page() {
         onLoginClick={() => setShowLogin(true)}
         onAccountCreationClick={() => setShowAccountCreation(true)}
         onLogoutClick={handleLogout}
+        className="fixed top-0 left-0 right-0 z-50"
       />
 
-      <div className="flex">
+      <div className="flex pt-16"> {/* Add padding to avoid overlap with fixed navbar */}
         {/* Left Drawer */}
-        <div className="hidden lg:block">
+        <div className="hidden lg:block fixed top-16 left-0 bottom-0 z-40 w-72"> {/* Adjust top padding to match navbar height */}
           <LeftDrawer />
         </div>
 
         {/* Main Content */}
-        <main className="flex-1 p-12 space-y-12">
+        <main className="flex-1 p-12 space-y-12 ml-72"> {/* Add margin-left to avoid overlap with fixed left drawer */}
           <WelcomeSection />
           <CommunityFeed />
         </main>
