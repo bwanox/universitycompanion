@@ -25,7 +25,7 @@ const usePostActions = (postId) => {
     try {
       const comment = {
         content: commentContent,
-        author: user.displayName || user.email,
+        author: user.username || user.email,
         userId: user.uid,
         createdAt: new Date(),
       };

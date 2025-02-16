@@ -1,10 +1,13 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { auth, db } from "../auth/firebaseConfig";
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { collection, query, where, getDocs } from "firebase/firestore";
 
 const Login = () => {
+  const router = useRouter(); // Initialize the useRouter hook
+
   // Login state
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
@@ -48,6 +51,7 @@ const Login = () => {
       setIdentifier("");
       setPassword("");
       alert("Login successful!");
+      router.push("/"); // Redirect to the homepage
     } catch (err) {
       console.error(err);
       setError(err.message);
@@ -82,7 +86,7 @@ const Login = () => {
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
                 required
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-800"
               />
             </div>
             <div className="mb-4">
@@ -93,7 +97,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-700"
               />
             </div>
             <button

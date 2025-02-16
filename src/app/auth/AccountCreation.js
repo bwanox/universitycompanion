@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation"; 
 import { auth, db } from "../auth/firebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, collection, query, where, getDocs } from "firebase/firestore";
 
 const AccountCreation = () => {
@@ -90,6 +90,9 @@ const AccountCreation = () => {
         createdAt: new Date(),
       });
 
+      // Log the user in directly
+      await signInWithEmailAndPassword(auth, email, password);
+
       // Clear fields and redirect
       setEmail("");
       setUsername("");
@@ -118,7 +121,7 @@ const AccountCreation = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-800"
           />
         </div>
 
@@ -131,7 +134,7 @@ const AccountCreation = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-800"
           />
           <div className="mt-1">
             <p className={`${isUsernameValid ? "text-green-500" : "text-red-500"} text-sm`}>
@@ -149,7 +152,7 @@ const AccountCreation = () => {
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder="Enter phone number"
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-800"
           />
         </div>
 
@@ -162,7 +165,7 @@ const AccountCreation = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-800"
           />
           <div className="mt-1 space-y-1 text-sm">
             <p className={isPasswordMinLength ? "text-green-500" : "text-red-500"}>
@@ -186,7 +189,7 @@ const AccountCreation = () => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-700"
           />
           {confirmPassword && password !== confirmPassword && (
             <p className="text-sm text-red-500">Passwords do not match.</p>
@@ -198,7 +201,7 @@ const AccountCreation = () => {
 
         <button
           type="submit"
-          className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 "
         >
           Create Account
         </button>

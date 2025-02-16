@@ -13,7 +13,9 @@ const PostCard = ({ post }) => {
   const [isLiked, setIsLiked] = useState(post.likes.includes(user?.uid));
   const { toggleLike, addComment, isProcessing } = usePostActions(post.id);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
-  console.log(post);
+  const [showImageModal, setShowImageModal] = useState(false);
+  console.log("here is user",user);
+
   const handleLike = async () => {
     if (!user) {
       setShowLoginPrompt(true);
@@ -29,7 +31,7 @@ const PostCard = ({ post }) => {
       setShowLoginPrompt(true);
       return;
     }
-    await addComment(user, newComment);
+    await addComment(user , newComment);
     setNewComment('');
   };
 
@@ -75,7 +77,8 @@ const PostCard = ({ post }) => {
             <img
               src={post.imageUrl || post.imageBase64}
               alt="Post content"
-              className="w-full max-h-96 object-cover rounded-xl shadow-md hover:opacity-90 transition-opacity duration-200"
+              className="w-full max-h-96 object-cover rounded-xl shadow-md hover:opacity-90 transition-opacity duration-200 cursor-pointer"
+              onClick={() => setShowImageModal(true)}
             />
           )}
         </div>
@@ -125,7 +128,7 @@ const PostCard = ({ post }) => {
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder="Write a comment..."
-                className="flex-1 p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
+                className="flex-1 p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm text-gray-800"
               />
               <button
                 type="submit"
@@ -154,6 +157,25 @@ const PostCard = ({ post }) => {
         )}
       </div>
       <LoginPromptModal show={showLoginPrompt} onClose={() => setShowLoginPrompt(false)} />
+
+      {/* Image Modal */}
+      {showImageModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">
+          <div className="relative">
+            <button
+              onClick={() => setShowImageModal(false)}
+              className="absolute top-0 right-0 m-4 text-white text-2xl"
+            >
+              &times;
+            </button>
+            <img
+              src={post.imageUrl || post.imageBase64}
+              alt="Post content"
+              className="max-w-full max-h-full rounded-lg"
+            />
+          </div>
+        </div>
+      )}
     </>
   );
 };
