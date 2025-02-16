@@ -81,7 +81,7 @@ const RoutineTracker = () => {
             id: videoId,
             name: item.snippet.title,
             type: "video",
-            src: `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}&mute=1`,
+            src: `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}`,
           };
         });
         setYoutubeThemes(themes);

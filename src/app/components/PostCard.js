@@ -14,7 +14,7 @@ const PostCard = ({ post }) => {
   const { toggleLike, addComment, isProcessing } = usePostActions(post.id);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
-  console.log("here is user",user);
+  const [imageModalPosition, setImageModalPosition] = useState({ top: 0, left: 0 });
 
   const handleLike = async () => {
     if (!user) {
@@ -31,8 +31,14 @@ const PostCard = ({ post }) => {
       setShowLoginPrompt(true);
       return;
     }
-    await addComment(user , newComment);
+    await addComment(user, newComment);
     setNewComment('');
+  };
+
+  const handleImageClick = (e) => {
+    const rect = e.target.getBoundingClientRect();
+    setImageModalPosition({ top: rect.top + window.scrollY, left: rect.left + window.scrollX });
+    setShowImageModal(true);
   };
 
   return (
@@ -78,7 +84,7 @@ const PostCard = ({ post }) => {
               src={post.imageUrl || post.imageBase64}
               alt="Post content"
               className="w-full max-h-96 object-cover rounded-xl shadow-md hover:opacity-90 transition-opacity duration-200 cursor-pointer"
-              onClick={() => setShowImageModal(true)}
+              onClick={handleImageClick}
             />
           )}
         </div>
@@ -160,7 +166,14 @@ const PostCard = ({ post }) => {
 
       {/* Image Modal */}
       {showImageModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">
+        <div
+          className="fixed bg-black bg-opacity-75 z-50"
+          style={{
+            top: imageModalPosition.top,
+            left: imageModalPosition.left,
+            transform: 'translate(-50%, -50%)',
+          }}
+        >
           <div className="relative">
             <button
               onClick={() => setShowImageModal(false)}
