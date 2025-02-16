@@ -100,7 +100,7 @@ const AccountCreation = () => {
       setPassword("");
       setConfirmPassword("");
       alert("Account created successfully!");
-      router.push("/");
+      window.location.href = "/"; // Redirect to the homepage and refresh
     } catch (err) {
       console.error("Account creation error:", err);
       setError(err.message);

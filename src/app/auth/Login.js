@@ -8,7 +8,7 @@ import { useAuth } from "../auth/AuthContext"; // Import useAuth from AuthContex
 
 const Login = () => {
   const router = useRouter(); // Initialize the useRouter hook
-  const { user, loading } = useAuth(); // Get the user and loading state from AuthContext
+  const { user } = useAuth(); // Get the user from AuthContext
 
   // Login state
   const [identifier, setIdentifier] = useState("");
@@ -53,7 +53,7 @@ const Login = () => {
       setIdentifier("");
       setPassword("");
       alert("Login successful!");
-      router.replace("/"); // Redirect to the homepage and refresh
+      window.location.href = "/"; // Force redirect to the homepage and refresh
     } catch (err) {
       console.error(err);
       setError(err.message);
@@ -74,17 +74,9 @@ const Login = () => {
   useEffect(() => {
     if (user) {
       console.log("User is logged in, redirecting to homepage...");
-      router.replace("/"); // Redirect to the homepage and refresh if the user is logged in
+      window.location.href = "/"; // Force redirect to the homepage and refresh if the user is logged in
     }
-  }, [user, router]);
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="loader">Loading...</div>
-      </div>
-    );
-  }
+  }, [user]);
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">
