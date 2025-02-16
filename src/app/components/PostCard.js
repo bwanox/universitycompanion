@@ -35,7 +35,7 @@ const PostCard = ({ post }) => {
 
   return (
     <>
-      <div className="bg-white shadow rounded-xl p-4 mb-6">
+      <div className="bg-white shadow-lg rounded-xl p-6 mb-6 hover:shadow-2xl transition-shadow duration-300">
         {/* Post Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center">
@@ -43,17 +43,17 @@ const PostCard = ({ post }) => {
               <img
                 src={post.authorPhotoURL}
                 alt="avatar"
-                className="w-10 h-10 rounded-full mr-3"
+                className="w-12 h-12 rounded-full mr-4 border-2 border-blue-500"
               />
             ) : (
-              <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center mr-3">
-                <span className="text-lg font-semibold text-gray-700">
+              <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center mr-4">
+                <span className="text-xl font-semibold text-gray-700">
                   {post.author[0]}
                 </span>
               </div>
             )}
             <div>
-              <h3 className="text-gray-800 font-medium">{post.author}</h3>
+              <h3 className="text-lg text-gray-800 font-bold">{post.author}</h3>
               {post.createdAt && (
                 <p className="text-gray-500 text-xs">
                   {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
@@ -70,25 +70,25 @@ const PostCard = ({ post }) => {
 
         {/* Post Content */}
         <div className="mt-4">
-          <p className="text-gray-700">{post.content}</p>
-          {post.imageUrl && (
+          <p className="text-gray-700 text-base mb-4">{post.content}</p>
+          {(post.imageUrl || post.imageBase64) && (
             <img
-              src={post.imageUrl}
+              src={post.imageUrl || post.imageBase64}
               alt="Post content"
-              className="mt-4 w-full max-h-96 object-cover rounded-lg"
+              className="w-full max-h-96 object-cover rounded-xl shadow-md hover:opacity-90 transition-opacity duration-200"
             />
           )}
         </div>
 
         {/* Post Actions */}
-        <div className="flex items-center justify-between mt-4 border-t pt-2">
+        <div className="flex items-center justify-between mt-6 border-t pt-4">
           <button
             onClick={handleLike}
             disabled={isProcessing}
             className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors"
           >
             <svg
-              className={`w-5 h-5 ${isLiked ? 'fill-blue-600' : 'fill-none'}`}
+              className={`w-6 h-6 ${isLiked ? 'fill-blue-600' : 'fill-none'} stroke-current`}
               stroke="currentColor"
               viewBox="0 0 24 24"
             >
@@ -105,7 +105,7 @@ const PostCard = ({ post }) => {
             onClick={() => setShowComments(!showComments)}
             className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -119,31 +119,31 @@ const PostCard = ({ post }) => {
 
         {/* Comments Section */}
         {showComments && (
-          <div className="mt-4 border-t pt-4">
-            <form onSubmit={handleComment} className="flex items-center space-x-2 mb-4">
+          <div className="mt-6 border-t pt-4">
+            <form onSubmit={handleComment} className="flex items-center space-x-3 mb-4">
               <input
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder="Write a comment..."
-                className="flex-1 p-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
+                className="flex-1 p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
               />
               <button
                 type="submit"
                 disabled={isProcessing}
-                className="px-4 py-2 bg-blue-600 text-white rounded-full text-sm hover:bg-blue-700 transition-colors"
+                className="px-5 py-2 bg-blue-600 text-white rounded-full text-sm hover:bg-blue-700 transition-colors"
               >
                 Post
               </button>
             </form>
-            <div className="space-y-3">
+            <div className="space-y-4">
               {post.comments?.map((comment, index) => (
-                <div key={index} className="flex items-start">
-                  <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center mr-3">
-                    <span className="text-sm font-semibold text-gray-700">
+                <div key={index} className="flex items-start space-x-3">
+                  <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
+                    <span className="text-lg font-semibold text-gray-700">
                       {comment.author[0]}
                     </span>
                   </div>
-                  <div>
+                  <div className="bg-gray-100 rounded-xl p-3 shadow-sm">
                     <h4 className="text-gray-800 text-sm font-medium">{comment.author}</h4>
                     <p className="text-gray-600 text-sm">{comment.content}</p>
                   </div>

@@ -49,7 +49,7 @@ const PostCreation = () => {
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="Share an update..."
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none text-gray-800"
             rows="3"
           />
           {image && (

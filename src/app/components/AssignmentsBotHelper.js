@@ -48,11 +48,12 @@ const AssignmentBotHelper = ({ assignments, onClose }) => {
       - Extracted Text (if available): ${extractedText || "No text extracted"}
 
       Hint format:
-      - Keep it brief (1-2 sentences).
+      -use the language provided in the assignment.
       - Guide the student toward solving the problem without giving away the answer.
-      - If possible, suggest a strategy, formula, or relevant concept to review.
+      - give each question a brief answer and description depending on the language provided.
 
-      Generate a hint:
+      Generate a hint for each question:
+
     `;
 
     try {
@@ -60,20 +61,22 @@ const AssignmentBotHelper = ({ assignments, onClose }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer sk-proj-BJYn6Z7eWtbbOTjcA6ZnL1xo`,
+          Authorization: `Bearer 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`,
         },
         body: JSON.stringify({
           model: "gpt-4o-mini",
           messages: [{ role: "system", content: "You are an AI tutor." }, { role: "user", content: prompt }],
-          max_tokens: 50,
+          max_tokens: 5000,
         }),
       });
 
       const data = await response.json();
-if (!data.choices || data.choices.length === 0) {
-    throw new Error("Invalid API response: No choices found.");
-}
-setHint(data.choices[0].message.content || "No hint available.");
+      console.log("API response:", data);
+      if (!data.choices || data.choices.length === 0) {
+        throw new Error("Invalid API response: No choices found.");
+      }
+      setHint(data.choices[0].message.content || "No hint available.");
+      console.log("API response:", data.choices[0].message.content);
     } catch (error) {
       console.error("Error fetching hint:", error);
       setHint("Failed to fetch hint. Try again.");
@@ -136,7 +139,10 @@ setHint(data.choices[0].message.content || "No hint available.");
         {hint && (
           <div className="p-4 border rounded-lg bg-gray-100">
             <p className="font-bold text-blue-900">Hint:</p>
-            <p className="text-gray-800">{hint}</p>
+            <div
+              className="text-gray-800"
+              dangerouslySetInnerHTML={{ __html: hint.replace(/\n/g, "<br/>") }}
+            />
           </div>
         )}
       </div>

@@ -36,7 +36,13 @@ const compressImage = (file, maxSizeInBytes = 1024 * 1024) => {
 };
 
 const AssignmentsPage = () => {
-  const { assignments, getAssignments, addAssignment, updateAssignment, deleteAssignment } = useAssignments();
+  const {
+    assignments,
+    getAssignments,
+    addAssignment,
+    updateAssignment,
+    deleteAssignment,
+  } = useAssignments();
   const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingAssignment, setEditingAssignment] = useState(null);
@@ -58,7 +64,13 @@ const AssignmentsPage = () => {
   }, [user]);
 
   // Handler for submitting (adding/updating) an assignment.
-  const handleSubmitAssignment = async ({ course, assignment, dueDate, description, imageFile }) => {
+  const handleSubmitAssignment = async ({
+    course,
+    assignment,
+    dueDate,
+    description,
+    imageFile,
+  }) => {
     if (!user) return;
     try {
       let imageData = null;
@@ -101,8 +113,11 @@ const AssignmentsPage = () => {
     if (eventsForDay.length > 0) {
       const dayAssignments = assignments.filter((a) => a.dueDate === dateStr);
       const details = dayAssignments
-        .map((a) =>
-          `Course: ${a.course}\nAssignment: ${a.assignment}\nDue: ${a.dueDate}\nDesc: ${a.description || "N/A"}`
+        .map(
+          (a) =>
+            `Course: ${a.course}\nAssignment: ${a.assignment}\nDue: ${a.dueDate}\nDesc: ${
+              a.description || "N/A"
+            }`
         )
         .join("\n\n");
       alert(`Assignments for ${dateStr}:\n\n${details}`);
@@ -113,67 +128,71 @@ const AssignmentsPage = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <h1 className="text-3xl font-bold text-blue-900">Please log in to view assignments</h1>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
+        <h1 className="text-3xl font-bold text-white drop-shadow-lg">
+          Please log in to view assignments
+        </h1>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 relative">
+    <div className="min-h-screen p-8 relative bg-gradient-to-br from-gray-900 to-black">
       {/* Header */}
-      <header className="mb-8">
-        <h1 className="text-4xl font-extrabold text-blue-900 text-center">
+      <header className="mb-10 text-center bg-transparent">
+        <h1 className="text-5xl font-extrabold text-cyan-400 drop-shadow-2xl">
           Your Assignments
         </h1>
       </header>
 
       {/* Calendar Section */}
-      <section className="mb-8">
-        <CustomCalendar
-          events={calendarEvents}
-          onAddEvent={() => {
-            setEditingAssignment(null);
-            setIsModalOpen(true);
-          }}
-          onDayClick={handleDayClick}
-        />
+      <section className="mb-10">
+        <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6 shadow-xl">
+          <CustomCalendar
+            events={calendarEvents}
+            onAddEvent={() => {
+              setEditingAssignment(null);
+              setIsModalOpen(true);
+            }}
+            onDayClick={handleDayClick}
+          />
+        </div>
       </section>
 
       {/* Assignments Grid */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {assignments.length > 0 ? (
           assignments.map((assignment) => (
             <div
               key={assignment.id}
-              className="bg-white rounded-xl shadow-lg p-6 flex flex-col hover:shadow-2xl transition duration-300"
+              className="bg-gray-800 rounded-xl border border-gray-700 shadow-lg p-6 flex flex-col transition-transform duration-300 hover:scale-105 hover:shadow-2xl"
             >
               <div className="flex-1">
-                <h2 className="text-xl font-bold text-blue-800 mb-2">
+                <h2 className="text-2xl font-bold text-cyan-300 mb-2">
                   {assignment.course}: {assignment.assignment}
                 </h2>
-                <p className="text-gray-600 mb-2">Due: {assignment.dueDate}</p>
+                <p className="text-gray-400 mb-2">Due: {assignment.dueDate}</p>
                 {assignment.description && (
-                  <p className="text-gray-700 mb-4">{assignment.description}</p>
+                  <p className="text-gray-300 mb-4">{assignment.description}</p>
                 )}
                 {assignment.imageData && (
                   <img
                     src={assignment.imageData}
                     alt="Assignment"
-                    className="w-full h-48 object-cover rounded-lg border"
+                    className="w-full h-48 object-cover rounded-lg border border-gray-700 shadow-md"
                   />
                 )}
               </div>
-              <div className="mt-4 flex justify-between">
+              <div className="mt-6 flex justify-between">
                 <button
                   onClick={() => handleEditAssignment(assignment)}
-                  className="flex-1 mr-2 bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition"
+                  className="flex-1 mr-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full shadow-md hover:from-yellow-500 hover:to-orange-600 transition-colors focus:outline-none"
                 >
                   Edit
                 </button>
                 <button
                   onClick={() => handleDeleteAssignment(assignment.id)}
-                  className="flex-1 ml-2 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+                  className="flex-1 ml-2 bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2 rounded-full shadow-md hover:from-red-600 hover:to-pink-600 transition-colors focus:outline-none"
                 >
                   Delete
                 </button>
@@ -181,7 +200,9 @@ const AssignmentsPage = () => {
             </div>
           ))
         ) : (
-          <p className="col-span-full text-center text-gray-600">No assignments available.</p>
+          <p className="col-span-full text-center text-gray-300 text-xl">
+            No assignments available.
+          </p>
         )}
       </section>
 
@@ -191,7 +212,9 @@ const AssignmentsPage = () => {
           setEditingAssignment(null);
           setIsModalOpen(true);
         }}
-        className="fixed bottom-8 right-8 bg-blue-600 text-white w-16 h-16 rounded-full shadow-lg flex items-center justify-center text-3xl hover:bg-blue-700 transition"
+        title="Add Assignment"
+        aria-label="Add Assignment"
+        className="fixed bottom-8 right-8 bg-gradient-to-r from-green-400 to-blue-500 text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center text-4xl hover:from-green-500 hover:to-blue-600 animate-pulse focus:outline-none"
       >
         +
       </button>
@@ -199,7 +222,9 @@ const AssignmentsPage = () => {
       {/* Floating Bot Helper Button */}
       <button
         onClick={() => setIsBotOpen(true)}
-        className="fixed bottom-8 left-8 bg-purple-600 text-white w-16 h-16 rounded-full shadow-lg flex items-center justify-center text-3xl hover:bg-purple-700 transition"
+        title="Open Bot Helper"
+        aria-label="Open Bot Helper"
+        className="fixed bottom-24 left-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center text-4xl hover:from-purple-600 hover:to-pink-600 animate-bounce focus:outline-none"
       >
         🤖
       </button>

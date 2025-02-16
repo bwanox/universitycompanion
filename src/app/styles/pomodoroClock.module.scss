@@ -1,0 +1,143 @@
+$dark-gray: rgba(34, 33, 32, 0.8);
+$main-text-color: #DADADB;
+$radial-bg-color: #636361;
+$radial-break-color: #EB6841;
+$radial-session-color: #00A0B0;
+$radial-overlay-color: #EAE9E5;
+$shadow: 0 16px 28px 0 rgba(0, 0, 0, 0.8), 0 25px 55px 0 rgba(0, 0, 0, 0.21);
+$light-orange: #FF7F50;   // Light orange color
+$dark-orange: #D15D00; 
+$white: #FFFFFF;          // White color
+
+.clock {
+  border-radius: 4px;
+  font-family: "Open Sans", sans-serif;
+  width: 220px;
+  text-align: center;
+  padding: 10px;
+  
+  
+  
+}
+
+.progressRadial {
+  display: inline-block;
+  position: relative;
+  font-size: 2.2em;
+  width: 6em;
+  padding-bottom: 6em;
+  margin-top: 5px;
+  border-radius: 50%;
+  
+
+  .overlay {
+    position: absolute;
+    top: 5%;
+    bottom: 5%;
+    left: 5%;
+    right: 5%;
+    border-radius: 50%;
+    background-color: $radial-overlay-color;
+    font-family: "Droid Sans Mono", monospace;
+    padding-top: 34%;
+  }
+}
+
+.session {
+  .overlay {
+    color: $radial-session-color;
+  }
+}
+
+.break {
+  .overlay {
+    color: $radial-break-color;
+  }
+}
+
+// Stylish Background for Time Settings
+.settings {
+  border-top: 1px dotted #818184;
+  border-bottom: 1px dotted #818184;
+  display: flex;
+  justify-content: space-around;
+  padding: 15px 0;
+
+  .timeSession,
+  .timeBreak {
+    text-align: center;
+    padding: 5px;
+    border-radius: 8px;
+    margin-left: auto;
+    color: $main-text-color;
+    font-weight: bold;
+
+    h6 {
+      margin-bottom: 5px;
+    }
+
+    .timeDisplay {
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-bottom: 8px;
+      padding: 8px;
+      border-radius: 6px;
+    }
+
+    button {
+      background-color: rgba(8, 8, 8, 0.7);
+      border: none;
+      border-radius: 4px;
+      color: $main-text-color;
+      width: 30px;
+      margin: 0 5px;
+      transition: background-color 0.2s ease-in-out;
+
+      &:hover,
+      &:focus {
+        background-color: rgba(130, 130, 130, 0.8);
+      }
+    }
+  }
+
+  // Session Time Background
+  .timeSession {
+    background: linear-gradient(135deg, #00A0B0 0%, #007A8C 100%);
+    padding-left: 1px;
+    gap: 10px;
+    margin-right: 8px;
+    .timeDisplay {
+      background-color: rgba(0, 160, 176, 0.4);
+    }
+  }
+
+  // Break Time Background
+  .timeBreak {
+    background: linear-gradient(135deg, #EB6841 0%, #D15030 100%);
+    .timeDisplay {
+      background-color: rgba(235, 104, 65, 0.4);
+    }
+  }
+}
+
+.controls {
+  padding-top: 20px;
+  padding-bottom: 10px;
+
+  button {
+    background-color: rgba(8, 8, 8, 0.7);
+    border: none;
+    border-radius: 4px;
+    color: $main-text-color;
+    font-size: 0.9em;
+    height: 40px;
+    width: 70px;
+    margin: 0 15px;
+    transition: background-color 0.2s ease-in-out;
+
+    &:hover,
+    &:focus {
+      background-color: rgba(130, 130, 130, 0.8);
+    }
+  }
+}

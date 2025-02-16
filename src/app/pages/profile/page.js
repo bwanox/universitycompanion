@@ -131,38 +131,40 @@ const ProfilePage = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+      <div className="flex items-center justify-center min-h-screen bg-gray-900">
+        <div className="w-16 h-16 border-4 border-cyan-400 border-dashed rounded-full animate-spin"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gray-50 flex flex-col items-center">
-      <h1 className="text-4xl font-bold mb-8 text-blue-900">Your Profile</h1>
+    <div className="min-h-screen p-6 bg-gradient-to-br from-gray-900 to-black flex flex-col items-center">
+      <h1 className="text-4xl font-bold mb-8 text-cyan-400 drop-shadow-2xl">
+        Your Profile
+      </h1>
       {user ? (
-        <div className="w-full max-w-2xl bg-white p-8 rounded-lg shadow-lg">
+        <div className="w-full max-w-2xl bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-8 shadow-xl">
           {/* Display user details */}
           <div className="mb-6">
-            <h2 className="text-2xl font-semibold text-blue-800">
+            <h2 className="text-2xl font-semibold text-cyan-300">
               {profileData.username || user.email}
             </h2>
-            <p className="text-gray-700">Email: {user.email}</p>
-            {profileData.phone && <p className="text-gray-700">Phone: {profileData.phone}</p>}
-            {profileData.bio && <p className="text-gray-700">Bio: {profileData.bio}</p>}
+            <p className="text-white">Email: {user.email}</p>
+            {profileData.phone && <p className="text-white">Phone: {profileData.phone}</p>}
+            {profileData.bio && <p className="text-white">Bio: {profileData.bio}</p>}
           </div>
 
           {/* Toggle for editing profile info */}
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-4 mb-4">
             <button
               onClick={() => setIsEditingProfile(!isEditingProfile)}
-              className="px-6 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded shadow"
+              className="px-6 py-2 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white rounded-full shadow-xl"
             >
               {isEditingProfile ? "Cancel Edit" : "Edit Profile"}
             </button>
             <button
               onClick={() => setIsChangingPassword(!isChangingPassword)}
-              className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded shadow"
+              className="px-6 py-2 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-full shadow-xl"
             >
               {isChangingPassword ? "Cancel Password Change" : "Change Password"}
             </button>
@@ -170,39 +172,39 @@ const ProfilePage = () => {
 
           {/* Edit Profile Form */}
           {isEditingProfile && (
-            <div className="mt-6 border-t pt-6 space-y-4">
+            <div className="mt-6 border-t border-white/20 pt-6 space-y-4">
               <div>
-                <label className="block text-gray-800 mb-1">Username</label>
+                <label className="block text-white mb-1">Username</label>
                 <input
                   type="text"
                   name="username"
                   value={profileData.username}
                   onChange={handleProfileChange}
-                  className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 bg-gray-800 text-white border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-cyan-400"
                 />
               </div>
               <div>
-                <label className="block text-gray-800 mb-1">Phone (optional)</label>
+                <label className="block text-white mb-1">Phone (optional)</label>
                 <input
                   type="text"
                   name="phone"
                   value={profileData.phone}
                   onChange={handleProfileChange}
-                  className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 bg-gray-800 text-white border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-cyan-400"
                 />
               </div>
               <div>
-                <label className="block text-gray-800 mb-1">Bio (optional)</label>
+                <label className="block text-white mb-1">Bio (optional)</label>
                 <textarea
                   name="bio"
                   value={profileData.bio}
                   onChange={handleProfileChange}
-                  className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 bg-gray-800 text-white border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-cyan-400"
                 ></textarea>
               </div>
               <button
                 onClick={handleProfileSave}
-                className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded shadow"
+                className="px-6 py-2 bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 text-white rounded-full shadow-xl"
               >
                 Save Profile
               </button>
@@ -211,27 +213,30 @@ const ProfilePage = () => {
 
           {/* Password Change Form */}
           {isChangingPassword && (
-            <form onSubmit={handlePasswordChangeSubmit} className="mt-6 border-t pt-6 space-y-4">
+            <form
+              onSubmit={handlePasswordChangeSubmit}
+              className="mt-6 border-t border-white/20 pt-6 space-y-4"
+            >
               <div>
-                <label className="block text-gray-800 mb-1">Current Password</label>
+                <label className="block text-white mb-1">Current Password</label>
                 <input
                   type="password"
                   name="currentPassword"
                   value={passwordForm.currentPassword}
                   onChange={handlePasswordFormChange}
                   required
-                  className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 bg-gray-800 text-white border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-cyan-400"
                 />
               </div>
               <div>
-                <label className="block text-gray-800 mb-1">New Password</label>
+                <label className="block text-white mb-1">New Password</label>
                 <input
                   type="password"
                   name="newPassword"
                   value={passwordForm.newPassword}
                   onChange={handlePasswordFormChange}
                   required
-                  className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 bg-gray-800 text-white border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-cyan-400"
                 />
                 <div className="mt-1 text-sm">
                   <p
@@ -264,20 +269,20 @@ const ProfilePage = () => {
                 </div>
               </div>
               <div>
-                <label className="block text-gray-800 mb-1">Confirm New Password</label>
+                <label className="block text-white mb-1">Confirm New Password</label>
                 <input
                   type="password"
                   name="confirmNewPassword"
                   value={passwordForm.confirmNewPassword}
                   onChange={handlePasswordFormChange}
                   required
-                  className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 bg-gray-800 text-white border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-cyan-400"
                 />
               </div>
               {passwordError && <p className="text-red-500">{passwordError}</p>}
               <button
                 type="submit"
-                className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded shadow"
+                className="px-6 py-2 bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 text-white rounded-full shadow-xl"
               >
                 Update Password
               </button>
@@ -285,20 +290,20 @@ const ProfilePage = () => {
           )}
         </div>
       ) : (
-        <div className="w-full max-w-lg bg-white p-8 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-semibold mb-6 text-blue-800">
+        <div className="w-full max-w-lg bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-8 shadow-xl">
+          <h2 className="text-2xl font-semibold mb-6 text-cyan-300">
             You are not logged in
           </h2>
           <div className="flex flex-wrap gap-4">
             <button
               onClick={handleLoginClick}
-              className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded shadow"
+              className="px-6 py-2 bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white rounded-full shadow-xl"
             >
               Log in
             </button>
             <button
               onClick={handleAccountCreationClick}
-              className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded shadow"
+              className="px-6 py-2 bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 text-white rounded-full shadow-xl"
             >
               Create Account
             </button>

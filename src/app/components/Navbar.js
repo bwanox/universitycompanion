@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useAuth } from "../auth/AuthContext";
+import useSearchPosts from "../hooks/useSearchPosts";
 
 const Navbar = ({
   searchTerm,
@@ -11,18 +12,19 @@ const Navbar = ({
   onLogoutClick,
 }) => {
   const { user, logout } = useAuth();
+  const { posts: searchResults, loading } = useSearchPosts(searchTerm);
 
   return (
     <nav className="bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 shadow-2xl py-4 border-b border-blue-800/50">
-      <div className="container mx-auto flex items-center justify-between px-6">
-        {/* Logo with hover effect */}
+      <div className="container mx-auto flex items-center justify-between px-6 relative">
+        {/* Logo */}
         <div className="group flex items-center space-x-2">
           <span className="text-white font-bold text-2xl tracking-tight bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent transition-all duration-300 group-hover:bg-gradient-to-l">
             University Companion
           </span>
         </div>
 
-        {/* Search Bar with glassmorphism effect */}
+        {/* Search Bar */}
         <div className="relative flex-1 mx-8 max-w-2xl">
           <div className="relative">
             <input
@@ -48,30 +50,57 @@ const Navbar = ({
                 />
               </svg>
             </div>
+            {/* Dropdown for Search Suggestions */}
+            {searchTerm && (
+              <div className="absolute top-full mt-2 w-full bg-white rounded-lg shadow-lg z-10 max-h-80 overflow-y-auto">
+                {loading ? (
+                  <div className="p-4 text-gray-600">Loading...</div>
+                ) : searchResults.length > 0 ? (
+                  searchResults.map((post) => (
+                    <div
+                      key={post.id}
+                      className="p-4 border-b last:border-b-0 hover:bg-gray-100 cursor-pointer"
+                      // You can add an onClick handler here to navigate to the post.
+                    >
+                      <p className="text-gray-800 font-medium">
+                        {post.content.slice(0, 100)}
+                        {post.content.length > 100 && "..."}
+                      </p>
+                      {post.imageInfo && (
+                        <p className="text-gray-500 text-xs mt-1">
+                          {post.imageInfo.slice(0, 100)}
+                          {post.imageInfo.length > 100 && "..."}
+                        </p>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <div className="p-4 text-gray-600">No results found.</div>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Account Section with refined buttons */}
+        {/* Account Section */}
         <div className="flex items-center space-x-3">
           {user ? (
-            <>
-              <div className="flex items-center space-x-3">
-                <div className="flex flex-col items-end">
-                  <span className="text-sm font-medium text-cyan-100">
-                    {user.name || user.email}
-                  </span>
-                  <span className="text-xs text-cyan-400/80 font-light">
-                    Student Account
-                  </span>
-                </div>
-                <button
-                  onClick={logout}
-                  className="px-4 py-2.5 bg-gradient-to-r from-cyan-500/90 to-blue-600/90 hover:from-cyan-400/90 hover:to-blue-500/90 text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-cyan-500/20 active:scale-95"
-                >
-                  Logout
-                </button>
+            <div className="flex items-center space-x-3">
+              <div className="flex flex-col items-end">
+                <span className="text-sm font-medium text-cyan-100">
+                  {user.name || user.email}
+                </span>
+                <span className="text-xs text-cyan-400/80 font-light">
+                  Student Account
+                </span>
               </div>
-            </>
+              <button
+                onClick={logout}
+                className="px-4 py-2.5 bg-gradient-to-r from-cyan-500/90 to-blue-600/90 hover:from-cyan-400/90 hover:to-blue-500/90 text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-cyan-500/20 active:scale-95"
+              >
+                Logout
+              </button>
+            </div>
           ) : (
             <div className="flex space-x-3">
               <button

@@ -140,7 +140,7 @@ const GradesPage = () => {
   const analyzeCareer = async () => {
     setLoading(true);
     try {
-      const apiKey = "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"; // Replace with your actual API key
+      const apiKey = "sk-proj-REPLACE_WITH_YOUR_API_KEY"; // Replace with your actual API key
       const response = await axios.post(
         "https://api.openai.com/v1/chat/completions",
         {
@@ -183,8 +183,13 @@ const GradesPage = () => {
   const parsedRecommendations = parseCareerRecommendations(careerRecommendation);
 
   return (
-    <div className="min-h-screen p-6 bg-white text-blue-900 relative">
-      <h1 className="text-3xl font-bold mb-4">Your Grades</h1>
+    <div className="min-h-screen p-8 bg-gradient-to-br from-gray-900 to-black relative">
+      {/* Neon Header */}
+      <header className="mb-10 text-center bg-transparent">
+        <h1 className="text-5xl font-extrabold text-cyan-400 drop-shadow-2xl">
+          Your Grades
+        </h1>
+      </header>
 
       {/* Loading Overlay */}
       {loading && (
@@ -194,162 +199,377 @@ const GradesPage = () => {
       )}
 
       {/* Upload & Extract Grades */}
-      <div className="bg-blue-100 p-4 rounded-lg shadow-lg mb-6">
-        <h2 className="text-2xl font-semibold mb-2">Upload Grades Transcript</h2>
-        <input
-          type="file"
-          onChange={(e) => setFile(e.target.files[0])}
-          className="mb-2"
-        />
-        <button
-          onClick={handleFileUpload}
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-        >
-          Extract Grades
-        </button>
-      </div>
+      <section className="mb-6">
+        <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6 shadow-xl">
+          <h2 className="text-2xl font-semibold mb-2 text-cyan-300">
+            Upload Grades Transcript
+          </h2>
+          <input
+            type="file"
+            onChange={(e) => setFile(e.target.files[0])}
+            className="mb-4 p-2 bg-gray-800 text-white border border-gray-700 rounded"
+          />
+          <button
+            onClick={handleFileUpload}
+            className="bg-gradient-to-r from-green-400 to-blue-500 text-white px-4 py-2 rounded-full shadow-2xl hover:from-green-500 hover:to-blue-600 transition-colors"
+          >
+            Extract Grades
+          </button>
+        </div>
+      </section>
 
       {/* Display & Edit Saved Grades */}
-      <div className="bg-blue-100 p-4 rounded-lg shadow-lg mb-6">
-        <h2 className="text-2xl font-semibold mb-4">Saved Grades</h2>
-        {editableGrades.length > 0 ? (
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-blue-500 text-white">
-                <th className="p-3 text-left">Course</th>
-                <th className="p-3 text-left">Grade</th>
-                <th className="p-3 text-left">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {editableGrades.map((grade, index) => (
-                <tr key={index} className="border-b border-blue-300">
-                  <td className="p-3">
-                    <input
-                      type="text"
-                      value={grade.course}
-                      onChange={(e) =>
-                        handleInputChange(index, "course", e.target.value)
-                      }
-                      className="w-full p-2 border rounded"
-                    />
-                  </td>
-                  <td className="p-3">
-                    <input
-                      type="number"
-                      step="0.1"
-                      value={grade.grade}
-                      onChange={(e) =>
-                        handleInputChange(index, "grade", e.target.value)
-                      }
-                      className="w-full p-2 border rounded"
-                    />
-                  </td>
-                  <td className="p-3">
-                    <button
-                      onClick={() => handleDeleteRow(index)}
-                      className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-                    >
-                      Delete
-                    </button>
-                  </td>
+      <section className="mb-6">
+        <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6 shadow-xl">
+          <h2 className="text-2xl font-semibold mb-4 text-cyan-300">
+            Saved Grades
+          </h2>
+          {editableGrades.length > 0 ? (
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-cyan-500 text-white">
+                  <th className="p-3 text-left">Course</th>
+                  <th className="p-3 text-left">Grade</th>
+                  <th className="p-3 text-left">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <p>No grades available.</p>
-        )}
-        <div className="mt-4">
-          <button
-            onClick={handleAddRow}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mr-4"
-          >
-            Add Grade
-          </button>
-          <button
-            onClick={handleSaveChanges}
-            className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
-          >
-            Save Changes
-          </button>
-        </div>
-      </div>
-
-      {/* Personality Questionnaire */}
-      <div className="bg-blue-100 p-4 rounded-lg shadow-lg mb-6">
-        <h2 className="text-2xl font-semibold mb-4">Personality Questionnaire</h2>
-        <p>Answer these questions to receive career recommendations:</p>
-        {[
-          "Do you enjoy problem-solving?",
-          "Do you like working in teams?",
-          "Are you interested in coding?",
-          "Do you prefer hands-on work?",
-        ].map((question, index) => (
-          <div key={index} className="my-2">
-            <label className="block">{question}</label>
-            <select
-              onChange={(e) =>
-                setAnswers({ ...answers, [question]: e.target.value })
-              }
-              className="p-2 border rounded"
-            >
-              <option value="">Select</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
-          </div>
-        ))}
-        {/* Additional open question for career choices */}
-        <div className="my-2">
-          <label className="block">Which careers are you considering?</label>
-          <input
-            type="text"
-            onChange={(e) =>
-              setAnswers({
-                ...answers,
-                "Which careers are you considering?": e.target.value,
-              })
-            }
-            className="w-full p-2 border rounded"
-            placeholder="E.g., Data Scientist, Software Engineer..."
-          />
-        </div>
-        <button
-          onClick={analyzeCareer}
-          className="bg-green-500 text-white px-4 py-2 mt-4 rounded-lg hover:bg-green-600"
-        >
-          Get Career Recommendation
-        </button>
-      </div>
-
-      {/* Career Recommendation Result */}
-      {careerRecommendation && (
-        <div className="bg-green-100 p-4 rounded-lg shadow-lg mt-6">
-          <h2 className="text-2xl font-semibold mb-4">Career Suggestions</h2>
-          {parsedRecommendations.length > 0 ? (
-            <div className="space-y-4">
-              {parsedRecommendations.map((rec, idx) => (
-                <div key={idx} className="bg-white p-4 rounded-lg shadow flex flex-col">
-                  <div className="flex justify-between items-center mb-2">
-                    <h3 className="text-xl font-bold">{rec.career}</h3>
-                    <span className="font-medium">{rec.percentage}%</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-4 mb-2">
-                    <div
-                      className="bg-green-500 h-4 rounded-full"
-                      style={{ width: `${rec.percentage}%` }}
-                    ></div>
-                  </div>
-                  <p className="text-gray-700">{rec.description}</p>
-                </div>
-              ))}
-            </div>
+              </thead>
+              <tbody>
+                {editableGrades.map((grade, index) => (
+                  <tr key={index} className="border-b border-gray-700">
+                    <td className="p-3">
+                      <input
+                        type="text"
+                        value={grade.course}
+                        onChange={(e) =>
+                          handleInputChange(index, "course", e.target.value)
+                        }
+                        className="w-full p-2 bg-gray-800 text-white border border-gray-700 rounded"
+                      />
+                    </td>
+                    <td className="p-3">
+                      <input
+                        type="number"
+                        step="0.1"
+                        value={grade.grade}
+                        onChange={(e) =>
+                          handleInputChange(index, "grade", e.target.value)
+                        }
+                        className="w-full p-2 bg-gray-800 text-white border border-gray-700 rounded"
+                      />
+                    </td>
+                    <td className="p-3">
+                      <button
+                        onClick={() => handleDeleteRow(index)}
+                        className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-2 py-1 rounded-full shadow-md hover:from-red-600 hover:to-pink-600 transition-colors"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           ) : (
-            <p>{careerRecommendation}</p>
+            <p className="text-white">No grades available.</p>
           )}
+          <div className="mt-4">
+            <button
+              onClick={handleAddRow}
+              className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-full shadow-2xl hover:from-blue-600 hover:to-purple-600 transition-colors mr-4"
+            >
+              Add Grade
+            </button>
+            <button
+              onClick={handleSaveChanges}
+              className="bg-gradient-to-r from-green-400 to-blue-500 text-white px-4 py-2 rounded-full shadow-2xl hover:from-green-500 hover:to-blue-600 transition-colors"
+            >
+              Save Changes
+            </button>
+          </div>
         </div>
+      </section>
+
+      {/* Expanded Personality Questionnaire */}
+<section className="mb-6">
+  <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6 shadow-xl">
+    <h2 className="text-2xl font-semibold mb-4 text-cyan-300">
+      Personality Questionnaire
+    </h2>
+    <p className="text-white mb-4">
+      Answer the following questions to help us understand your personality and preferences for a tailored career recommendation:
+    </p>
+    <div className="space-y-4">
+      {/* 1. Problem-solving skills */}
+      <div className="my-2">
+        <label className="block text-white">
+          How do you rate your problem-solving skills?
+        </label>
+        <select
+          onChange={(e) =>
+            setAnswers({ ...answers, problemSolving: e.target.value })
+          }
+          className="p-2 bg-gray-800 text-white border border-gray-700 rounded w-full"
+        >
+          <option value="">Select</option>
+          <option value="Excellent">Excellent</option>
+          <option value="Good">Good</option>
+          <option value="Average">Average</option>
+          <option value="Below Average">Below Average</option>
+        </select>
+      </div>
+      {/* 2. Work preference */}
+      <div className="my-2">
+        <label className="block text-white">
+          How do you prefer to work?
+        </label>
+        <select
+          onChange={(e) =>
+            setAnswers({ ...answers, workPreference: e.target.value })
+          }
+          className="p-2 bg-gray-800 text-white border border-gray-700 rounded w-full"
+        >
+          <option value="">Select</option>
+          <option value="Independently">Independently</option>
+          <option value="In a team">In a team</option>
+          <option value="Mix of both">Mix of both</option>
+        </select>
+      </div>
+      {/* 3. Work environment */}
+      <div className="my-2">
+        <label className="block text-white">
+          What work environment suits you best?
+        </label>
+        <select
+          onChange={(e) =>
+            setAnswers({ ...answers, workEnvironment: e.target.value })
+          }
+          className="p-2 bg-gray-800 text-white border border-gray-700 rounded w-full"
+        >
+          <option value="">Select</option>
+          <option value="Structured and predictable">Structured and predictable</option>
+          <option value="Fast-paced and dynamic">Fast-paced and dynamic</option>
+          <option value="Flexible and creative">Flexible and creative</option>
+        </select>
+      </div>
+      {/* 4. Work-life balance */}
+      <div className="my-2">
+        <label className="block text-white">
+          How important is work-life balance to you?
+        </label>
+        <select
+          onChange={(e) =>
+            setAnswers({ ...answers, workLifeBalance: e.target.value })
+          }
+          className="p-2 bg-gray-800 text-white border border-gray-700 rounded w-full"
+        >
+          <option value="">Select</option>
+          <option value="Very important">Very important</option>
+          <option value="Somewhat important">Somewhat important</option>
+          <option value="Not important">Not important</option>
+        </select>
+      </div>
+      {/* 5. Stress management */}
+      <div className="my-2">
+        <label className="block text-white">
+          How do you handle stress?
+        </label>
+        <select
+          onChange={(e) =>
+            setAnswers({ ...answers, stressManagement: e.target.value })
+          }
+          className="p-2 bg-gray-800 text-white border border-gray-700 rounded w-full"
+        >
+          <option value="">Select</option>
+          <option value="I thrive under pressure">I thrive under pressure</option>
+          <option value="I manage it well">I manage it well</option>
+          <option value="I struggle sometimes">I struggle sometimes</option>
+        </select>
+      </div>
+      {/* 6. Learning new technologies */}
+      <div className="my-2">
+        <label className="block text-white">
+          Do you enjoy learning new technologies?
+        </label>
+        <select
+          onChange={(e) =>
+            setAnswers({ ...answers, learningNewTech: e.target.value })
+          }
+          className="p-2 bg-gray-800 text-white border border-gray-700 rounded w-full"
+        >
+          <option value="">Select</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+      {/* 7. Communication skills */}
+      <div className="my-2">
+        <label className="block text-white">
+          How would you describe your communication skills?
+        </label>
+        <select
+          onChange={(e) =>
+            setAnswers({ ...answers, communication: e.target.value })
+          }
+          className="p-2 bg-gray-800 text-white border border-gray-700 rounded w-full"
+        >
+          <option value="">Select</option>
+          <option value="Excellent">Excellent</option>
+          <option value="Good">Good</option>
+          <option value="Average">Average</option>
+          <option value="Below Average">Below Average</option>
+        </select>
+      </div>
+      {/* 8. Creativity */}
+      <div className="my-2">
+        <label className="block text-white">
+          How creative do you consider yourself?
+        </label>
+        <select
+          onChange={(e) =>
+            setAnswers({ ...answers, creativity: e.target.value })
+          }
+          className="p-2 bg-gray-800 text-white border border-gray-700 rounded w-full"
+        >
+          <option value="">Select</option>
+          <option value="Highly creative">Highly creative</option>
+          <option value="Somewhat creative">Somewhat creative</option>
+          <option value="Not very creative">Not very creative</option>
+        </select>
+      </div>
+      {/* 9. Adaptability */}
+      <div className="my-2">
+        <label className="block text-white">
+          How adaptable are you to change?
+        </label>
+        <select
+          onChange={(e) =>
+            setAnswers({ ...answers, adaptability: e.target.value })
+          }
+          className="p-2 bg-gray-800 text-white border border-gray-700 rounded w-full"
+        >
+          <option value="">Select</option>
+          <option value="Highly adaptable">Highly adaptable</option>
+          <option value="Moderately adaptable">Moderately adaptable</option>
+          <option value="Not very adaptable">Not very adaptable</option>
+        </select>
+      </div>
+      {/* 10. Handling criticism */}
+      <div className="my-2">
+        <label className="block text-white">
+          How do you handle constructive criticism?
+        </label>
+        <select
+          onChange={(e) =>
+            setAnswers({ ...answers, criticismHandling: e.target.value })
+          }
+          className="p-2 bg-gray-800 text-white border border-gray-700 rounded w-full"
+        >
+          <option value="">Select</option>
+          <option value="I welcome it to improve">I welcome it to improve</option>
+          <option value="I consider it carefully">I consider it carefully</option>
+          <option value="I find it challenging">I find it challenging</option>
+        </select>
+      </div>
+      {/* 11. Planning style */}
+      <div className="my-2">
+        <label className="block text-white">
+          Do you prefer detailed planning or improvisation?
+        </label>
+        <select
+          onChange={(e) =>
+            setAnswers({ ...answers, planningStyle: e.target.value })
+          }
+          className="p-2 bg-gray-800 text-white border border-gray-700 rounded w-full"
+        >
+          <option value="">Select</option>
+          <option value="Detailed planning">Detailed planning</option>
+          <option value="Improvisation">Improvisation</option>
+          <option value="A mix of both">A mix of both</option>
+        </select>
+      </div>
+      {/* 12. Motivation by recognition */}
+      <div className="my-2">
+        <label className="block text-white">
+          How motivated are you by recognition and rewards?
+        </label>
+        <select
+          onChange={(e) =>
+            setAnswers({ ...answers, motivation: e.target.value })
+          }
+          className="p-2 bg-gray-800 text-white border border-gray-700 rounded w-full"
+        >
+          <option value="">Select</option>
+          <option value="Highly motivated">Highly motivated</option>
+          <option value="Somewhat motivated">Somewhat motivated</option>
+          <option value="Not motivated">Not motivated</option>
+        </select>
+      </div>
+      {/* 13. Importance of social interaction */}
+      <div className="my-2">
+        <label className="block text-white">
+          How important is social interaction in your work?
+        </label>
+        <select
+          onChange={(e) =>
+            setAnswers({ ...answers, socialInteraction: e.target.value })
+          }
+          className="p-2 bg-gray-800 text-white border border-gray-700 rounded w-full"
+        >
+          <option value="">Select</option>
+          <option value="Very important">Very important</option>
+          <option value="Somewhat important">Somewhat important</option>
+          <option value="Not important">Not important</option>
+        </select>
+      </div>
+    </div>
+    <button
+      onClick={analyzeCareer}
+      className="bg-gradient-to-r from-green-400 to-blue-500 text-white px-4 py-2 rounded-full shadow-2xl hover:from-green-500 hover:to-blue-600 transition-colors mt-4"
+    >
+      Get Career Recommendation
+    </button>
+  </div>
+</section>
+
+{/* Career Recommendation Result */}
+{careerRecommendation && (
+  <section className="mt-6">
+    <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6 shadow-xl">
+      <h2 className="text-2xl font-semibold mb-4 text-cyan-300">
+        Career Suggestions
+      </h2>
+      {parsedRecommendations.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {parsedRecommendations.map((rec, idx) => (
+            <div
+              key={idx}
+              className="bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col"
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-bold text-cyan-400">
+                  {rec.career}
+                </h3>
+                <span className="font-medium text-white">
+                  {rec.percentage}%
+                </span>
+              </div>
+              <div className="w-full bg-gray-700 rounded-full h-4 mb-4">
+                <div
+                  className="bg-green-500 h-4 rounded-full"
+                  style={{ width: `${rec.percentage}%` }}
+                ></div>
+              </div>
+              <p className="text-gray-200">{rec.description}</p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-white">{careerRecommendation}</p>
       )}
+    </div>
+  </section>
+)}
+
     </div>
   );
 };

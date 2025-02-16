@@ -1,6 +1,6 @@
 import "./globals.css";
 import { AuthProvider } from "./auth/AuthContext";
-
+import NavigationMenu from "./components/NavigationMenu";
 
 export default function Layout({ children }) {
   return (
@@ -16,6 +16,9 @@ export default function Layout({ children }) {
       <main>
       <AuthProvider>
         {children}
+        <div className="nav-fixed">
+            <NavigationMenu />
+          </div>
         </AuthProvider>
 
         </main>

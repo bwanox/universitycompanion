@@ -19,3 +19,9 @@ a {
 a:hover {
   text-decoration: underline;
 }
+.nav-fixed {
+  position: fixed;
+  bottom: 50px;
+  left: 10px;
+  z-index: 1000; /* Adjust if needed to ensure it stays on top */
+}
