@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../auth/firebaseConfig';
@@ -25,25 +24,35 @@ const useCreatePost = () => {
     setIsUploading(true);
     try {
       let imageBase64 = '';
+      let imageBase64Original = ''; // Original image under 1MB
       let imageInfo = ''; // This will store OCR extracted text from the image.
 
       if (image) {
         let processedImage = image;
 
-        // If image is larger than 1MB, compress it.
+        // Check if image is greater than 1MB
         if (image.size > 1024 * 1024) {
-          const options = {
-            maxSizeMB: 1,
+          let options = {
+            maxSizeMB: 0.7, // Start with 0.7MB to ensure it gets under 1MB
             maxWidthOrHeight: 1920,
             useWebWorker: true,
           };
           processedImage = await imageCompression(image, options);
+
+          // If still greater than 1MB, try a lower size
+          if (processedImage.size > 1024 * 1024) {
+            options.maxSizeMB = 0.5; // Reduce further
+            processedImage = await imageCompression(image, options);
+          }
         }
 
-        // Convert the (processed) image file to Base64.
+        // Convert the processed image to Base64
         imageBase64 = await convertFileToBase64(processedImage);
 
-        // Perform OCR on the processed image using Tesseract.js.
+        // Save the original image under 1MB
+        imageBase64Original = await convertFileToBase64(image);
+
+        // Perform OCR on the processed image
         try {
           const { data: { text } } = await Tesseract.recognize(processedImage, 'eng', {
             logger: (m) => console.log(m),
@@ -54,12 +63,13 @@ const useCreatePost = () => {
           imageInfo = '';
         }
       }
-      console.log('Image Info:', user);
-      // Save the post to Firestore, including the image Base64 data and OCR text.
+
+      // Save post to Firestore
       await addDoc(collection(db, 'posts'), {
         content,
-        imageBase64,  // Base64-encoded image.
-        imageInfo,    // OCR extracted text from the image.
+        imageBase64,         // Compressed image (under 1MB)
+        imageBase64Original, // Original image (under 1MB)
+        imageInfo,           // OCR extracted text from the image
         author: user.username || user.email,
         authorPhotoURL: user.photoURL || '',
         userId: user.uid,
@@ -67,6 +77,7 @@ const useCreatePost = () => {
         comments: [],
         createdAt: new Date(),
       });
+
     } catch (error) {
       console.error('Error creating post:', error);
     }

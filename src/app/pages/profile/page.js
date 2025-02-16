@@ -66,22 +66,27 @@ const ProfilePage = () => {
 
   // Save updated profile info (username, phone, bio) to Firestore
   const handleProfileSave = async () => {
-    if (user) {
-      try {
-        const userDocRef = doc(db, "users", user.uid);
-        await updateDoc(userDocRef, {
-          username: profileData.username,
-          phone: profileData.phone || null,
-          bio: profileData.bio || null,
-        });
-        alert("Profile updated successfully!");
-        setIsEditingProfile(false);
-      } catch (err) {
-        console.error("Error updating profile:", err);
-        alert("Error updating profile. Please try again.");
-      }
+    console.log("Saving profile...",user);
+    if (!user || !user.uid) {
+      console.error("User or user ID is undefined.");
+      alert("Unable to save profile. Please log in again.");
+      return;
+    }
+    try {
+      const userDocRef = doc(db, "users", user.uid);
+      await updateDoc(userDocRef, {
+        username: profileData.username,
+        phone: profileData.phone || null,
+        bio: profileData.bio || null,
+      });
+      alert("Profile updated successfully!");
+      setIsEditingProfile(false);
+    } catch (err) {
+      console.error("Error updating profile:", err);
+      alert("Error updating profile. Please try again.");
     }
   };
+  
 
   // Handle changes in the password change form
   const handlePasswordFormChange = (e) => {

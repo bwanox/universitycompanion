@@ -19,9 +19,9 @@ export const AuthProvider = ({ children }) => {
         const userDoc = await getDoc(doc(db, "users", currentUser.uid));
         if (userDoc.exists()) {
           const userData = userDoc.data();
-          setUser({ ...currentUser, ...userData }); // Update state with additional user data
+          setUser({ uid: currentUser.uid, ...currentUser, ...userData }); // Update state with additional user data and uid
         } else {
-          setUser(currentUser); // If no additional data, just set the current user
+          setUser({ uid: currentUser.uid, ...currentUser }); // If no additional data, just set the current user with uid
         }
       } else {
         setUser(null); // No user is logged in
