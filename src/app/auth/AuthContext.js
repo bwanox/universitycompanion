@@ -10,6 +10,7 @@ const AuthContext = createContext();
 // Provide AuthContext to the whole app
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); // Stores the logged-in user
+  const [loading, setLoading] = useState(true); // Track loading state
 
   useEffect(() => {
     // Firebase listener to track auth state
@@ -26,6 +27,7 @@ export const AuthProvider = ({ children }) => {
       } else {
         setUser(null); // No user is logged in
       }
+      setLoading(false); // Set loading to false after auth state is determined
     });
 
     return () => unsubscribe(); // Cleanup
@@ -38,7 +40,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, logout }}>
+    <AuthContext.Provider value={{ user, loading, logout }}>
       {children}
     </AuthContext.Provider>
   );

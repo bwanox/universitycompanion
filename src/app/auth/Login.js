@@ -1,12 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { auth, db } from "../auth/firebaseConfig";
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { collection, query, where, getDocs } from "firebase/firestore";
+import { useAuth } from "../auth/AuthContext"; // Import useAuth from AuthContext
 
 const Login = () => {
   const router = useRouter(); // Initialize the useRouter hook
+  const { user, loading } = useAuth(); // Get the user and loading state from AuthContext
 
   // Login state
   const [identifier, setIdentifier] = useState("");
@@ -51,7 +53,7 @@ const Login = () => {
       setIdentifier("");
       setPassword("");
       alert("Login successful!");
-      router.push("/"); // Redirect to the homepage
+      router.replace("/"); // Redirect to the homepage and refresh
     } catch (err) {
       console.error(err);
       setError(err.message);
@@ -68,6 +70,21 @@ const Login = () => {
       setError(err.message);
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      console.log("User is logged in, redirecting to homepage...");
+      router.replace("/"); // Redirect to the homepage and refresh if the user is logged in
+    }
+  }, [user, router]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="loader">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">
