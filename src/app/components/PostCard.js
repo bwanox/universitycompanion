@@ -1,20 +1,58 @@
 "use client";
 
-import React, { useState } from 'react';
-import { useAuth } from '../auth/AuthContext';
-import usePostActions from '../hooks/usePostActions';
-import { formatDistanceToNow } from 'date-fns';
-import LoginPromptModal from './LoginPromptModal';
+import React, { useState } from "react";
+import { useAuth } from "../auth/AuthContext";
+import usePostActions from "../hooks/usePostActions";
+import { formatDistanceToNow } from "date-fns";
+import LoginPromptModal from "./LoginPromptModal";
+import { useUserById } from "../hooks/useUserById";
+import NeonLoader from "./NeonLoader";
+
+// A component to render an individual comment with the user fetched by UID
+const CommentItem = ({ comment }) => {
+  const { user: commentUser, loading } = useUserById(comment.userId);
+  
+  // If the comment user is still loading, show the Neon Loader.
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-2">
+        <NeonLoader />
+      </div>
+    );
+  }
+
+  const username = commentUser ? commentUser.username : comment.author;
+
+  return (
+    <div className="flex items-start space-x-3">
+      <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
+        <span className="text-lg font-semibold text-gray-700">
+          {username && username[0]}
+        </span>
+      </div>
+      <div className="bg-gray-100 rounded-xl p-3 shadow-sm">
+        <h4 className="text-gray-800 text-sm font-medium">{username}</h4>
+        <p className="text-gray-600 text-sm">{comment.content}</p>
+      </div>
+    </div>
+  );
+};
 
 const PostCard = ({ post }) => {
   const { user } = useAuth();
-  const [newComment, setNewComment] = useState('');
+  const [newComment, setNewComment] = useState("");
   const [showComments, setShowComments] = useState(false);
   const [isLiked, setIsLiked] = useState(post.likes.includes(user?.uid));
   const { toggleLike, addComment, isProcessing } = usePostActions(post.id);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
-  const [imageModalPosition, setImageModalPosition] = useState({ top: 0, left: 0 });
+  const [imageModalPosition, setImageModalPosition] = useState({
+    top: 0,
+    left: 0,
+  });
+
+  // Fetch post author data using the UID from your post document (assumes post.userId exists)
+  const { user: postAuthor, loading: postAuthorLoading } = useUserById(post.userId);
 
   const handleLike = async () => {
     if (!user) {
@@ -31,15 +69,28 @@ const PostCard = ({ post }) => {
       setShowLoginPrompt(true);
       return;
     }
+    // Ensure your addComment function stores comment.userId = user.uid
     await addComment(user, newComment);
-    setNewComment('');
+    setNewComment("");
   };
 
   const handleImageClick = (e) => {
     const rect = e.target.getBoundingClientRect();
-    setImageModalPosition({ top: rect.top + window.scrollY, left: rect.left + window.scrollX });
+    setImageModalPosition({
+      top: rect.top + window.scrollY,
+      left: rect.left + window.scrollX,
+    });
     setShowImageModal(true);
   };
+
+  // Until the post author's data is loaded, display the Neon Loader.
+  if (postAuthorLoading) {
+    return (
+      <div className="bg-white shadow-lg rounded-xl p-6 mb-6 flex justify-center items-center">
+        <NeonLoader />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -47,24 +98,28 @@ const PostCard = ({ post }) => {
         {/* Post Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            {post.authorPhotoURL ? (
+            {postAuthor && postAuthor.photoURL ? (
               <img
-                src={post.authorPhotoURL}
+                src={postAuthor.photoURL}
                 alt="avatar"
                 className="w-12 h-12 rounded-full mr-4 border-2 border-blue-500"
               />
             ) : (
               <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center mr-4">
                 <span className="text-xl font-semibold text-gray-700">
-                  {post.author[0]}
+                  {postAuthor && postAuthor.username ? postAuthor.username[0] : "U"}
                 </span>
               </div>
             )}
             <div>
-              <h3 className="text-lg text-gray-800 font-bold">{post.author}</h3>
+              <h3 className="text-lg text-gray-800 font-bold">
+                {postAuthor?.username || "Unknown"}
+              </h3>
               {post.createdAt && (
                 <p className="text-gray-500 text-xs">
-                  {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
+                  {formatDistanceToNow(new Date(post.createdAt), {
+                    addSuffix: true,
+                  })}
                 </p>
               )}
             </div>
@@ -97,7 +152,7 @@ const PostCard = ({ post }) => {
             className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors"
           >
             <svg
-              className={`w-6 h-6 ${isLiked ? 'fill-blue-600' : 'fill-none'} stroke-current`}
+              className={`w-6 h-6 ${isLiked ? "fill-blue-600" : "fill-none"} stroke-current`}
               stroke="currentColor"
               viewBox="0 0 24 24"
             >
@@ -146,17 +201,7 @@ const PostCard = ({ post }) => {
             </form>
             <div className="space-y-4">
               {post.comments?.map((comment, index) => (
-                <div key={index} className="flex items-start space-x-3">
-                  <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
-                    <span className="text-lg font-semibold text-gray-700">
-                      {comment.author[0]}
-                    </span>
-                  </div>
-                  <div className="bg-gray-100 rounded-xl p-3 shadow-sm">
-                    <h4 className="text-gray-800 text-sm font-medium">{comment.author}</h4>
-                    <p className="text-gray-600 text-sm">{comment.content}</p>
-                  </div>
-                </div>
+                <CommentItem key={index} comment={comment} />
               ))}
             </div>
           </div>
@@ -171,7 +216,7 @@ const PostCard = ({ post }) => {
           style={{
             top: imageModalPosition.top,
             left: imageModalPosition.left,
-            transform: 'translate(-50%, -50%)',
+            transform: "translate(-50%, -50%)",
           }}
         >
           <div className="relative">

@@ -4,11 +4,12 @@ import { useRouter } from "next/navigation";
 import { auth, db } from "../auth/firebaseConfig";
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { collection, query, where, getDocs } from "firebase/firestore";
-import { useAuth } from "../auth/AuthContext"; // Import useAuth from AuthContext
+import { useAuth } from "../auth/AuthContext";
+import NeonLoader from "../components/NeonLoader"; // Import the NeonLoader component
 
 const Login = () => {
-  const router = useRouter(); // Initialize the useRouter hook
-  const { user } = useAuth(); // Get the user from AuthContext
+  const router = useRouter();
+  const { user } = useAuth();
 
   // Login state
   const [identifier, setIdentifier] = useState("");
@@ -19,6 +20,9 @@ const Login = () => {
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
   const [message, setMessage] = useState("");
+
+  // Loading state for login verification
+  const [isLoading, setIsLoading] = useState(false);
 
   // Detect type of identifier (email, phone, or username)
   const detectIdentifierType = (value) => {
@@ -34,6 +38,7 @@ const Login = () => {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true); // Start loading
     let emailToLogin = identifier;
     try {
       const type = detectIdentifierType(identifier);
@@ -53,10 +58,12 @@ const Login = () => {
       setIdentifier("");
       setPassword("");
       alert("Login successful!");
-      window.location.href = "/"; // Force redirect to the homepage and refresh
+      window.location.href = "/"; // Force redirect to the homepage
     } catch (err) {
       console.error(err);
       setError(err.message);
+    } finally {
+      setIsLoading(false); // Stop loading regardless of outcome
     }
   };
 
@@ -74,7 +81,7 @@ const Login = () => {
   useEffect(() => {
     if (user) {
       console.log("User is logged in, redirecting to homepage...");
-      window.location.href = "/"; // Force redirect to the homepage and refresh if the user is logged in
+      window.location.href = "/";
     }
   }, [user]);
 
@@ -84,38 +91,46 @@ const Login = () => {
         <>
           <h2 className="text-2xl font-semibold text-blue-600 mb-4">Login</h2>
           {error && <p className="text-red-500 mb-4">{error}</p>}
-          <form onSubmit={handleLoginSubmit}>
-            <div className="mb-4">
-              <label htmlFor="identifier" className="block text-gray-700">
-                Email, Username or Phone Number
-              </label>
-              <input
-                type="text"
-                id="identifier"
-                value={identifier}
-                onChange={(e) => setIdentifier(e.target.value)}
-                required
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-800"
-              />
+          {isLoading ? (
+            <div className="flex justify-center items-center py-10">
+              <NeonLoader />
             </div>
-            <div className="mb-4">
-              <label htmlFor="password" className="block text-gray-700">Password</label>
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-700"
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              Login
-            </button>
-          </form>
+          ) : (
+            <form onSubmit={handleLoginSubmit}>
+              <div className="mb-4">
+                <label htmlFor="identifier" className="block text-gray-700">
+                  Email, Username or Phone Number
+                </label>
+                <input
+                  type="text"
+                  id="identifier"
+                  value={identifier}
+                  onChange={(e) => setIdentifier(e.target.value)}
+                  required
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-800"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="password" className="block text-gray-700">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-700"
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                Login
+              </button>
+            </form>
+          )}
           <div className="mt-4 text-center">
             <a
               href="#"
@@ -138,7 +153,9 @@ const Login = () => {
           {message && <p className="text-green-500 mb-4">{message}</p>}
           <form onSubmit={handleResetPassword}>
             <div className="mb-4">
-              <label htmlFor="resetEmail" className="block text-gray-700">Enter your Email</label>
+              <label htmlFor="resetEmail" className="block text-gray-700">
+                Enter your Email
+              </label>
               <input
                 type="email"
                 id="resetEmail"

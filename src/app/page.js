@@ -1,18 +1,41 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AccountCreation from "./auth/AccountCreation";
 import Login from "./auth/Login";
 import Navbar from "./components/Navbar";
 import LeftDrawer from "./components/LeftDrawer";
 import WelcomeSection from "./components/WelcomeSection";
 import CommunityFeed from "./components/CommunityFeed";
+import NeonLoader from "./components/NeonLoader";
+import { useAuth } from "./auth/AuthContext";
 
 export default function Page() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showAccountCreation, setShowAccountCreation] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+
+  // Get user and loading state from your AuthContext
+  const { user, loading } = useAuth();
+
+  // Sync local isLoggedIn state with auth context
+  useEffect(() => {
+    if (user) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, [user]);
+
+  // Show neon loader while auth status is being determined
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 via-purple-900 to-black">
+        <NeonLoader />
+      </div>
+    );
+  }
 
   const handleLoginSuccess = () => {
     setIsLoggedIn(true);
@@ -40,14 +63,14 @@ export default function Page() {
         className="fixed top-0 left-0 right-0 z-50"
       />
 
-      <div className="flex pt-16"> {/* Add padding to avoid overlap with fixed navbar */}
+      <div className="flex pt-16">
         {/* Left Drawer */}
-        <div className="hidden lg:block fixed top-16 left-0 bottom-0 z-40 w-72"> {/* Adjust top padding to match navbar height */}
+        <div className="hidden lg:block fixed top-16 left-0 bottom-0 z-40 w-72">
           <LeftDrawer />
         </div>
 
         {/* Main Content */}
-        <main className="flex-1 p-12 space-y-12 ml-72"> {/* Add margin-left to avoid overlap with fixed left drawer */}
+        <main className="flex-1 p-12 space-y-12 ml-72">
           <WelcomeSection />
           <CommunityFeed />
         </main>
