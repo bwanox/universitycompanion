@@ -2,28 +2,53 @@ import "./globals.css";
 import { AuthProvider } from "./auth/AuthContext";
 import NavigationMenu from "./components/NavigationMenu";
 
+export const metadata = {
+  title: "Unifriend",
+  description: "University Companion App",
+  icons: {
+    icon: [
+      { url: "/unifriendlogo.svg", sizes: "any", type: "image/svg+xml" },
+      { url: "/unifriendlogo.svg", sizes: "16x16", type: "image/svg+xml" },
+      { url: "/unifriendlogo.svg", sizes: "32x32", type: "image/svg+xml" },
+    ],
+    shortcut: "/unifriendlogo.svg",
+    apple: "/unifriendlogo.svg",
+  },
+};
+
 export default function Layout({ children }) {
+  // Debug: Check if icon file exists
+  if (typeof window !== 'undefined') {
+    console.log('Checking icon at:', window.location.origin + '/unifriendlogo.svg');
+    fetch('/unifriendlogo.svg')
+      .then(response => {
+        console.log('Icon file status:', response.status);
+        if (!response.ok) {
+          console.error('Icon file not found or inaccessible');
+        }
+      })
+      .catch(err => console.error('Error checking icon:', err));
+  }
+
   return (
     <html lang="en">
       <head>
-        <meta charSet="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Your App Title</title>
-        <link rel="icon" href="/favicon.ico" />
+        {/* Force favicon refresh with cache busting */}
+        <link rel="icon" href="/unifriendlogo.svg?v=1" type="image/svg+xml" />
+        <link rel="shortcut icon" href="/unifriendlogo.svg?v=1" type="image/svg+xml" />
       </head>
       <body>
-    <div>
-      <main>
-      <AuthProvider>
-        {children}
-        <div className="nav-fixed">
-            <NavigationMenu />
-          </div>
-        </AuthProvider>
-
-        </main>
-    </div>
-    </body>
+        <div>
+          <main>
+            <AuthProvider>
+              {children}
+              <div className="nav-fixed">
+                <NavigationMenu />
+              </div>
+            </AuthProvider>
+          </main>
+        </div>
+      </body>
     </html>
   )
 }

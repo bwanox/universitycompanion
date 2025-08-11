@@ -7,7 +7,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { useAuth } from "../auth/AuthContext";
 import NeonLoader from "../components/NeonLoader"; // Import the NeonLoader component
 
-const Login = () => {
+const Login = ({ onClose, onSuccess }) => { // Accept onClose and onSuccess props
   const router = useRouter();
   const { user } = useAuth();
 
@@ -23,6 +23,20 @@ const Login = () => {
 
   // Loading state for login verification
   const [isLoading, setIsLoading] = useState(false);
+
+  // Close modal handler
+  const handleClose = () => {
+    if (onClose) {
+      onClose(); // Use the onClose prop from parent
+    } else {
+      // Fallback if no onClose prop
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = "/";
+      }
+    }
+  };
 
   // Detect type of identifier (email, phone, or username)
   const detectIdentifierType = (value) => {
@@ -58,7 +72,13 @@ const Login = () => {
       setIdentifier("");
       setPassword("");
       alert("Login successful!");
-      window.location.href = "/"; // Force redirect to the homepage
+      
+      // Call onSuccess if provided, otherwise fallback to redirect
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        window.location.href = "/";
+      }
     } catch (err) {
       console.error(err);
       setError(err.message);
@@ -79,14 +99,39 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (user) {
+    if (user && onClose) {
+      console.log("User is logged in, closing modal...");
+      onClose();
+    } else if (user) {
       console.log("User is logged in, redirecting to homepage...");
       window.location.href = "/";
     }
-  }, [user]);
+  }, [user, onClose]);
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">
+    <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg relative">
+      {/* Close button - positioned at top right */}
+      <button
+        onClick={handleClose}
+        className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 focus:outline-none"
+        aria-label="Close"
+      >
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+
       {!isForgotPassword ? (
         <>
           <h2 className="text-2xl font-semibold text-blue-600 mb-4">Login</h2>
@@ -162,7 +207,7 @@ const Login = () => {
                 value={resetEmail}
                 onChange={(e) => setResetEmail(e.target.value)}
                 required
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-800"
               />
             </div>
             <button

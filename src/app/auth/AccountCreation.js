@@ -5,7 +5,7 @@ import { auth, db } from "../auth/firebaseConfig";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, collection, query, where, getDocs } from "firebase/firestore";
 
-const AccountCreation = () => {
+const AccountCreation = ({ onClose, onSuccess }) => { // Accept onClose and onSuccess props
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [phone, setPhone] = useState("");
@@ -13,6 +13,20 @@ const AccountCreation = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
+
+  // Close modal handler
+  const handleClose = () => {
+    if (onClose) {
+      onClose(); // Use the onClose prop from parent
+    } else {
+      // Fallback if no onClose prop
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = "/";
+      }
+    }
+  };
 
   // Basic validations
   const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
@@ -93,14 +107,20 @@ const AccountCreation = () => {
       // Log the user in directly
       await signInWithEmailAndPassword(auth, email, password);
 
-      // Clear fields and redirect
+      // Clear fields
       setEmail("");
       setUsername("");
       setPhone("");
       setPassword("");
       setConfirmPassword("");
       alert("Account created successfully!");
-      window.location.href = "/"; // Redirect to the homepage and refresh
+      
+      // Call onSuccess if provided, otherwise fallback to redirect
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        window.location.href = "/";
+      }
     } catch (err) {
       console.error("Account creation error:", err);
       setError(err.message);
@@ -108,7 +128,29 @@ const AccountCreation = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">
+    <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg relative">
+      {/* Close button - positioned at top right */}
+      <button
+        onClick={handleClose}
+        className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 focus:outline-none"
+        aria-label="Close"
+      >
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+
       <h2 className="text-2xl font-semibold text-blue-600 mb-4">Create an Account</h2>
       {error && <p className="text-red-500 mb-4">{error}</p>}
       <form onSubmit={handleSubmit}>
