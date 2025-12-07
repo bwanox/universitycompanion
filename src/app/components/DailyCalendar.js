@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-const DailyCalendar = ({ selectedDate, tasks, selectedHours, onHourClick }) => {
+const DailyCalendar = ({ selectedDate, tasks = [], selectedHours = [], onHourClick, onTaskClick }) => {
   // Build an array of hours from 0 (midnight) to 23 (11 PM)
   const hours = [];
   for (let h = 0; h < 24; h++) {
@@ -17,12 +17,14 @@ const DailyCalendar = ({ selectedDate, tasks, selectedHours, onHourClick }) => {
     return typeof time.toDate === "function" ? time.toDate() : new Date(time);
   };
 
-  // Filter tasks for the selected date, ensuring that startTime exists.
-  const tasksForDay = tasks.filter((task) => {
-    const taskStart = convertToDate(task.startTime);
-    if (!taskStart) return false;
-    return taskStart.toDateString() === selectedDate.toDateString();
-  });
+  // Filter tasks for the selected date, ensuring that startTime exists and selectedDate is valid.
+  const tasksForDay = Array.isArray(tasks) && selectedDate instanceof Date
+    ? tasks.filter((task) => {
+        const taskStart = convertToDate(task.startTime);
+        if (!taskStart) return false;
+        return taskStart.toDateString() === selectedDate.toDateString();
+      })
+    : [];
   console.log(tasksForDay); // Debugging line to check tasks for the selected date
 
   // Helper to format hour labels (0 -> 12 AM, 13 -> 1 PM, etc.)
@@ -66,7 +68,7 @@ const DailyCalendar = ({ selectedDate, tasks, selectedHours, onHourClick }) => {
 
         {/* Clickable zones for each hour */}
         {hours.map((hr, idx) => {
-          const isSelected = selectedHours.includes(hr);
+          const isSelected = Array.isArray(selectedHours) && selectedHours.includes(hr);
           return (
             <div
               key={`zone-${idx}`}
@@ -74,7 +76,7 @@ const DailyCalendar = ({ selectedDate, tasks, selectedHours, onHourClick }) => {
                 isSelected ? "bg-blue-200" : "hover:bg-blue-50"
               }`}
               style={{ top: idx * cellHeight, height: cellHeight }}
-              onClick={() => onHourClick(selectedDate, hr)}
+              onClick={() => onHourClick && selectedDate instanceof Date ? onHourClick(selectedDate, hr) : undefined}
             />
           );
         })}
@@ -101,7 +103,10 @@ const DailyCalendar = ({ selectedDate, tasks, selectedHours, onHourClick }) => {
                 top: taskTop + 4,
                 height: taskHeight - 8,
               }}
-              onClick={() => onHourClick(selectedDate, start.getHours())}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (onTaskClick) onTaskClick(task);
+              }}
             >
               <p className="font-semibold text-sm text-gray-800 truncate">
                 {task.task}

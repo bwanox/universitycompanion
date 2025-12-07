@@ -25,11 +25,12 @@ const useSearchPosts = (searchTerm) => {
 
   // Filter posts based on searchTerm.
   useEffect(() => {
-    if (!searchTerm.trim()) {
+    const term = (searchTerm || "").trim();
+    if (!term) {
       setFilteredPosts(allPosts);
       return;
     }
-    const lowerCaseTerm = searchTerm.toLowerCase();
+    const lowerCaseTerm = term.toLowerCase();
     const results = allPosts.filter((post) => {
       const contentMatch =
         post.content && post.content.toLowerCase().includes(lowerCaseTerm);

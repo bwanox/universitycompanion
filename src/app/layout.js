@@ -16,20 +16,7 @@ export const metadata = {
   },
 };
 
-export default function Layout({ children }) {
-  // Debug: Check if icon file exists
-  if (typeof window !== 'undefined') {
-    console.log('Checking icon at:', window.location.origin + '/unifriendlogo.svg');
-    fetch('/unifriendlogo.svg')
-      .then(response => {
-        console.log('Icon file status:', response.status);
-        if (!response.ok) {
-          console.error('Icon file not found or inaccessible');
-        }
-      })
-      .catch(err => console.error('Error checking icon:', err));
-  }
-
+export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
@@ -41,10 +28,8 @@ export default function Layout({ children }) {
         <div>
           <main>
             <AuthProvider>
+              <NavigationMenu />
               {children}
-              <div className="nav-fixed">
-                <NavigationMenu />
-              </div>
             </AuthProvider>
           </main>
         </div>

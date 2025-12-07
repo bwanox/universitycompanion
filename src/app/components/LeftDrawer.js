@@ -16,55 +16,103 @@ const LeftDrawer = () => {
 
   ];
 
+  const gradients = [
+    { from: 'from-teal-500/20', to: 'to-emerald-600/20', border: 'border-teal-400/30', icon: 'text-teal-300', shadow: 'shadow-teal-500/30', glow: 'bg-teal-400' },
+    { from: 'from-purple-500/20', to: 'to-violet-600/20', border: 'border-purple-400/30', icon: 'text-purple-300', shadow: 'shadow-purple-500/30', glow: 'bg-purple-400' },
+    { from: 'from-orange-500/20', to: 'to-red-600/20', border: 'border-orange-400/30', icon: 'text-orange-300', shadow: 'shadow-orange-500/30', glow: 'bg-orange-400' },
+    { from: 'from-lime-500/20', to: 'to-green-600/20', border: 'border-lime-400/30', icon: 'text-lime-300', shadow: 'shadow-lime-500/30', glow: 'bg-lime-400' },
+    { from: 'from-yellow-500/20', to: 'to-amber-600/20', border: 'border-yellow-400/30', icon: 'text-yellow-300', shadow: 'shadow-yellow-500/30', glow: 'bg-yellow-400' },
+  ];
+
   return (
-    <div className="w-72 bg-slate-900/95 backdrop-blur-lg min-h-screen p-6 border-r border-blue-800/30 shadow-2xl">
-      {/* Title with gradient text */}
-      <h2 className="text-xl font-bold mb-8 bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-        University Companion
-      </h2>
+    <div className="w-72 bg-gradient-to-b from-slate-950/98 via-teal-950/95 to-slate-950/98 backdrop-blur-xl min-h-screen p-6 border-r border-teal-400/20 shadow-2xl shadow-teal-500/10 relative overflow-hidden">
+      {/* Animated background orbs */}
+      <div className="absolute top-10 right-5 w-40 h-40 bg-teal-400/10 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-20 left-5 w-40 h-40 bg-purple-400/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+      <div className="absolute top-1/2 left-1/2 w-32 h-32 bg-orange-400/5 rounded-full blur-2xl animate-pulse" style={{animationDelay: '1.5s'}}></div>
+      {/* Navigation Title */}
+      <div className="mb-4 relative">
+        <h3 className="text-xs font-bold text-teal-300/60 uppercase tracking-wider px-2">Navigation</h3>
+      </div>
 
-      <ul className="space-y-2">
-        {menuItems.map((item, index) => (
-          <li key={index}>
-            <Link href={item.path}>
-              <div
-                className={`group flex items-center space-x-3 p-3 rounded-xl transition-all duration-300 
-                  ${
-                    pathname === item.path 
-                      ? "bg-gradient-to-r from-cyan-600/30 to-blue-600/30 border border-cyan-500/20 shadow-lg"
-                      : "hover:bg-white/5 border border-transparent hover:border-cyan-500/10"
-                  }`
-                }
-              >
-                {/* Icon */}
-                <svg
-                  className={`h-5 w-5 flex-shrink-0 ${
-                    pathname === item.path 
-                      ? "text-cyan-400" 
-                      : "text-blue-400/60 group-hover:text-cyan-400"
-                  } transition-colors`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+      <ul className="space-y-3 relative">
+        {menuItems.map((item, index) => {
+          const gradient = gradients[index % gradients.length];
+          const isActive = pathname === item.path;
+          
+          return (
+            <li key={index} className="relative">
+              <Link href={item.path}>
+                <div
+                  className={`group relative flex items-center space-x-3 p-4 rounded-2xl transition-all duration-500 overflow-hidden
+                    ${
+                      isActive
+                        ? `bg-gradient-to-r ${gradient.from} ${gradient.to} border ${gradient.border} ${gradient.shadow} shadow-xl scale-[1.02]`
+                        : `bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-gradient-to-r hover:${gradient.from} hover:${gradient.to} hover:${gradient.border} hover:scale-105 hover:${gradient.shadow} hover:shadow-xl`
+                    }`
+                  }
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
-                </svg>
+                  {/* Hover shimmer effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+                  
+                  {/* Icon container with gradient */}
+                  <div className={`relative w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-500 ${
+                    isActive 
+                      ? `bg-gradient-to-br ${gradient.from} ${gradient.to} shadow-xl ${gradient.shadow}`
+                      : `bg-white/10 group-hover:bg-gradient-to-br group-hover:${gradient.from} group-hover:${gradient.to} group-hover:shadow-xl group-hover:${gradient.shadow}`
+                  }`}>
+                    <svg
+                      className={`h-5 w-5 flex-shrink-0 transition-all duration-500 ${
+                        isActive 
+                          ? gradient.icon
+                          : `text-white/60 group-hover:${gradient.icon} group-hover:scale-110`
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d={item.icon} />
+                    </svg>
+                  </div>
 
-                {/* Text */}
-                <span
-                  className={`font-medium ${
-                    pathname === item.path
-                      ? "text-cyan-100"
-                      : "text-blue-200/80 group-hover:text-cyan-100"
-                  } transition-colors`}
-                >
-                  {item.name}
-                </span>
-              </div>
-            </Link>
-          </li>
-        ))}
+                  {/* Text */}
+                  <span
+                    className={`font-black text-sm transition-all duration-500 ${
+                      isActive
+                        ? "text-white"
+                        : "text-blue-200/70 group-hover:text-white"
+                    }`}
+                  >
+                    {item.name}
+                  </span>
+                  
+                  {/* Active indicator */}
+                  {isActive && (
+                    <div className={`absolute right-3 w-2.5 h-2.5 rounded-full ${gradient.glow} animate-pulse shadow-lg ${gradient.shadow}`}></div>
+                  )}
+                </div>
+              </Link>
+            </li>
+          );
+        })}
       </ul>
+      
+      {/* Bottom decorative element */}
+      <div className="absolute bottom-6 left-6 right-6">
+        <div className="p-4 rounded-2xl bg-gradient-to-br from-teal-500/10 to-emerald-500/10 border border-teal-400/20 backdrop-blur-xl hover:scale-105 transition-all duration-500">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-400 to-emerald-500 flex items-center justify-center shadow-xl animate-pulse">
+              <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+            </div>
+            <div>
+              <p className="text-xs font-black text-teal-100">Quick Access</p>
+              <p className="text-xs text-teal-300/70 font-semibold">Always connected</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

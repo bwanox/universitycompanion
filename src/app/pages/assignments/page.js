@@ -128,8 +128,11 @@ const AssignmentsPage = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
-        <h1 className="text-3xl font-bold text-white drop-shadow-lg">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-violet-800 to-fuchsia-900 relative overflow-hidden">
+        {/* Animated orbs */}
+        <div className="absolute top-20 left-20 w-72 h-72 bg-purple-500/30 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-violet-500/20 rounded-full blur-3xl animate-pulse delay-700"></div>
+        <h1 className="text-4xl font-black text-white drop-shadow-2xl relative z-10">
           Please log in to view assignments
         </h1>
       </div>
@@ -137,72 +140,119 @@ const AssignmentsPage = () => {
   }
 
   return (
-    <div className="min-h-screen p-8 relative bg-gradient-to-br from-gray-900 to-black">
-      {/* Header */}
-      <header className="mb-10 text-center bg-transparent">
-        <h1 className="text-5xl font-extrabold text-cyan-400 drop-shadow-2xl">
-          Your Assignments
-        </h1>
-      </header>
+    <div className="min-h-screen p-8 relative bg-gradient-to-br from-purple-950 via-violet-900 to-fuchsia-950 overflow-hidden">
+      {/* Animated background orbs */}
+      <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-float"></div>
+      <div className="absolute top-40 right-0 w-80 h-80 bg-violet-500/20 rounded-full blur-3xl animate-float delay-500"></div>
+      <div className="absolute bottom-0 left-1/3 w-72 h-72 bg-fuchsia-500/20 rounded-full blur-3xl animate-float delay-1000"></div>
+      
+      {/* Floating particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-2 h-2 bg-purple-400/40 rounded-full animate-float"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+              animationDuration: `${3 + Math.random() * 4}s`,
+            }}
+          />
+        ))}
+      </div>
+
 
       {/* Calendar Section */}
-      <section className="mb-10">
-        <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6 shadow-xl">
-          <CustomCalendar
-            events={calendarEvents}
-            onAddEvent={() => {
-              setEditingAssignment(null);
-              setIsModalOpen(true);
-            }}
-            onDayClick={handleDayClick}
-          />
+      <section className="mb-12 relative z-10">
+        <div className="relative group">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-500 via-violet-500 to-fuchsia-500 rounded-3xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
+          <div className="relative bg-white/10 backdrop-blur-xl border border-white/30 rounded-3xl p-8 shadow-2xl">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-violet-500 rounded-xl flex items-center justify-center transform hover:rotate-12 transition-transform duration-300">
+                <span className="text-2xl">📅</span>
+              </div>
+              <h2 className="text-3xl font-black text-white">Assignment Calendar</h2>
+            </div>
+            <CustomCalendar
+              events={calendarEvents}
+              onAddEvent={() => {
+                setEditingAssignment(null);
+                setIsModalOpen(true);
+              }}
+              onDayClick={handleDayClick}
+            />
+          </div>
         </div>
       </section>
 
       {/* Assignments Grid */}
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
         {assignments.length > 0 ? (
-          assignments.map((assignment) => (
+          assignments.map((assignment, index) => (
             <div
               key={assignment.id}
-              className="bg-gray-800 rounded-xl border border-gray-700 shadow-lg p-6 flex flex-col transition-transform duration-300 hover:scale-105 hover:shadow-2xl"
+              className="relative group"
+              style={{
+                animationDelay: `${index * 100}ms`,
+              }}
             >
-              <div className="flex-1">
-                <h2 className="text-2xl font-bold text-cyan-300 mb-2">
-                  {assignment.course}: {assignment.assignment}
-                </h2>
-                <p className="text-gray-400 mb-2">Due: {assignment.dueDate}</p>
-                {assignment.description && (
-                  <p className="text-gray-300 mb-4">{assignment.description}</p>
-                )}
-                {assignment.imageData && (
-                  <img
-                    src={assignment.imageData}
-                    alt="Assignment"
-                    className="w-full h-48 object-cover rounded-lg border border-gray-700 shadow-md"
-                  />
-                )}
-              </div>
-              <div className="mt-6 flex justify-between">
-                <button
-                  onClick={() => handleEditAssignment(assignment)}
-                  className="flex-1 mr-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full shadow-md hover:from-yellow-500 hover:to-orange-600 transition-colors focus:outline-none"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDeleteAssignment(assignment.id)}
-                  className="flex-1 ml-2 bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2 rounded-full shadow-md hover:from-red-600 hover:to-pink-600 transition-colors focus:outline-none"
-                >
-                  Delete
-                </button>
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/40 via-violet-500/40 to-fuchsia-500/40 rounded-3xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="relative bg-white/10 backdrop-blur-xl border border-white/30 rounded-3xl p-6 shadow-xl flex flex-col transition-all duration-500 hover:scale-105 hover:border-purple-400/60 animate-fade-in">
+                <div className="flex-1">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-violet-500 rounded-xl flex items-center justify-center transform hover:rotate-12 transition-transform duration-300 flex-shrink-0">
+                      <span className="text-xl">📚</span>
+                    </div>
+                    <span className="px-3 py-1 bg-purple-500/30 backdrop-blur-sm rounded-full text-xs font-bold text-purple-200 border border-purple-400/30">
+                      {assignment.dueDate}
+                    </span>
+                  </div>
+                  <h2 className="text-2xl font-black text-white mb-2 bg-gradient-to-r from-purple-200 to-violet-200 bg-clip-text text-transparent">
+                    {assignment.course}
+                  </h2>
+                  <h3 className="text-lg font-bold text-purple-300 mb-3">
+                    {assignment.assignment}
+                  </h3>
+                  {assignment.description && (
+                    <p className="text-purple-100/80 mb-4 text-sm leading-relaxed">{assignment.description}</p>
+                  )}
+                  {assignment.imageData && (
+                    <div className="relative group/img">
+                      <div className="absolute inset-0 bg-gradient-to-br from-purple-500/30 to-violet-500/30 rounded-2xl blur-md opacity-0 group-hover/img:opacity-100 transition-opacity duration-300"></div>
+                      <img
+                        src={assignment.imageData}
+                        alt="Assignment"
+                        className="relative w-full h-48 object-cover rounded-2xl border border-purple-400/30 shadow-lg transform group-hover/img:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                  )}
+                </div>
+                <div className="mt-6 flex gap-3">
+                  <button
+                    onClick={() => handleEditAssignment(assignment)}
+                    className="flex-1 bg-gradient-to-r from-yellow-400 to-amber-500 text-white px-4 py-3 rounded-2xl shadow-lg hover:from-yellow-500 hover:to-amber-600 transition-all duration-300 font-bold hover:shadow-yellow-500/50 hover:scale-105 transform"
+                  >
+                    ✏️ Edit
+                  </button>
+                  <button
+                    onClick={() => handleDeleteAssignment(assignment.id)}
+                    className="flex-1 bg-gradient-to-r from-red-500 to-pink-600 text-white px-4 py-3 rounded-2xl shadow-lg hover:from-red-600 hover:to-pink-700 transition-all duration-300 font-bold hover:shadow-red-500/50 hover:scale-105 transform"
+                  >
+                    🗑️ Delete
+                  </button>
+                </div>
               </div>
             </div>
           ))
         ) : (
-          <p className="col-span-full text-center text-gray-300 text-xl">
-            No assignments available.
-          </p>
+          <div className="col-span-full text-center py-20">
+            <div className="inline-block p-12 bg-white/10 backdrop-blur-xl border border-white/30 rounded-3xl">
+              <div className="text-6xl mb-4 animate-bounce-slow">📝</div>
+              <p className="text-purple-200 text-2xl font-bold mb-2">No assignments yet</p>
+              <p className="text-purple-300/80">Click the + button to add your first assignment!</p>
+            </div>
+          </div>
         )}
       </section>
 
@@ -214,7 +264,7 @@ const AssignmentsPage = () => {
         }}
         title="Add Assignment"
         aria-label="Add Assignment"
-        className="fixed bottom-8 right-8 bg-gradient-to-r from-green-400 to-blue-500 text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center text-4xl hover:from-green-500 hover:to-blue-600 animate-pulse focus:outline-none"
+        className="fixed bottom-8 right-8 bg-gradient-to-br from-lime-400 via-emerald-400 to-teal-500 text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center text-4xl hover:scale-110 transition-all duration-300 focus:outline-none z-50 animate-pulse hover:animate-none hover:shadow-lime-500/50 border-2 border-white/30"
       >
         +
       </button>
@@ -224,7 +274,7 @@ const AssignmentsPage = () => {
         onClick={() => setIsBotOpen(true)}
         title="Open Bot Helper"
         aria-label="Open Bot Helper"
-        className="fixed bottom-24 left-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center text-4xl hover:from-purple-600 hover:to-pink-600 animate-bounce focus:outline-none"
+        className="fixed bottom-28 right-8 bg-gradient-to-br from-purple-500 via-violet-500 to-fuchsia-500 text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center text-3xl hover:scale-110 transition-all duration-300 focus:outline-none z-50 hover:shadow-purple-500/50 border-2 border-white/30 animate-shimmer"
       >
         🤖
       </button>
