@@ -133,7 +133,7 @@ const AssignmentsPage = () => {
   }
 
   return (
-    <div className="min-h-screen p-8 relative bg-gradient-to-br from-purple-950 via-violet-900 to-fuchsia-950 overflow-hidden">
+    <div className="min-h-screen p-4 lg:p-8 relative bg-gradient-to-br from-purple-950 via-violet-900 to-fuchsia-950 overflow-hidden">
       {/* Animated background orbs */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-float"></div>
       <div className="absolute top-40 right-0 w-80 h-80 bg-violet-500/20 rounded-full blur-3xl animate-float delay-500"></div>
@@ -157,10 +157,10 @@ const AssignmentsPage = () => {
 
 
       {/* Calendar Section */}
-      <section className="mb-12 relative z-10">
+      <section className="mb-8 lg:mb-12 relative z-10">
         <div className="relative group">
           <div className="absolute inset-0 bg-gradient-to-r from-purple-500 via-violet-500 to-fuchsia-500 rounded-3xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
-          <div className="relative bg-white/10 backdrop-blur-xl border border-white/30 rounded-3xl p-8 shadow-2xl">
+          <div className="relative bg-white/10 backdrop-blur-xl border border-white/30 rounded-2xl lg:rounded-3xl p-4 lg:p-8 shadow-2xl">
             <CustomCalendar
               events={calendarEvents}
               onAddEvent={() => {

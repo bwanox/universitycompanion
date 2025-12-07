@@ -53,9 +53,9 @@ export default function Page() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-teal-950 via-purple-950 to-slate-950 text-white font-sans relative overflow-hidden">
-      {/* Top Navigation Bar */}
-      <div className="fixed top-0 left-0 right-0 z-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-teal-950 via-purple-950 to-slate-950 text-white font-sans relative overflow-x-hidden">
+      {/* Top Navigation Bar - Hidden on mobile */}
+      <div className="hidden lg:block fixed top-0 left-0 right-0 z-50">
         <Navbar
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
@@ -63,6 +63,16 @@ export default function Page() {
           onAccountCreationClick={() => setShowAccountCreation(true)}
           onLogoutClick={handleLogout}
         />
+      </div>
+
+      {/* Mobile Header */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-white/10">
+        <div className="flex items-center justify-between px-4 py-3">
+          <h1 className="text-xl font-black bg-gradient-to-r from-teal-400 to-purple-400 bg-clip-text text-transparent">UniCompanion</h1>
+          <button className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500/20 to-purple-500/20 border border-teal-400/30 flex items-center justify-center">
+            <svg className="w-5 h-5 text-teal-300" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+          </button>
+        </div>
       </div>
       {/* Dynamic Animated Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -80,18 +90,62 @@ export default function Page() {
         <div className="absolute top-1/2 right-1/3 w-2 h-2 bg-purple-400 rounded-full animate-bounce-slow opacity-60" style={{animationDelay: '2s'}}></div>
       </div>
 
-      <div className="flex pt-16">
-        {/* Left Drawer */}
+      <div className="flex pt-14 lg:pt-16 pb-20 lg:pb-0">
+        {/* Left Drawer - Desktop only */}
         <div className="hidden lg:block fixed top-16 left-0 bottom-0 z-40 w-72">
           <LeftDrawer />
         </div>
 
         {/* Main Content */}
-        <main className="flex-1 ml-0 lg:ml-72 p-6 lg:p-10 relative z-10">
+        <main className="flex-1 ml-0 lg:ml-72 px-3 py-4 lg:p-10 relative z-10 w-full max-w-full overflow-x-hidden">
           {/* Community Action Cards */}
-          <section className="mb-10">
-            {/* Quick Actions with new vibrant colors */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 animate-fade-in">
+          <section className="mb-6 lg:mb-10 w-full">
+            {/* Mobile: Horizontal scroll cards */}
+            <div className="lg:hidden overflow-x-auto pb-4 -mx-3 px-3 scrollbar-hide">
+              <div className="flex gap-3 min-w-max">
+                <a href="/pages/routine" className="flex-shrink-0 w-32 group relative bg-gradient-to-br from-teal-500/15 via-emerald-500/15 to-teal-600/15 backdrop-blur-xl border border-teal-400/30 rounded-2xl p-4 hover:scale-105 transition-all duration-300 overflow-hidden">
+                  <div className="relative flex flex-col items-center space-y-2 text-center">
+                    <span className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-400 to-emerald-500 flex items-center justify-center shadow-lg">
+                      <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 7V3m8 4V3M3 11h18M5 19h14a2 2 0 002-2v-6H3v6a2 2 0 002 2z"/></svg>
+                    </span>
+                    <div>
+                      <p className="text-xs font-bold text-teal-100">My Space</p>
+                    </div>
+                  </div>
+                </a>
+                <a href="/pages/assignments" className="flex-shrink-0 w-32 group relative bg-gradient-to-br from-purple-500/15 via-violet-500/15 to-purple-600/15 backdrop-blur-xl border border-purple-400/30 rounded-2xl p-4 hover:scale-105 transition-all duration-300 overflow-hidden">
+                  <div className="relative flex flex-col items-center space-y-2 text-center">
+                    <span className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-400 to-violet-500 flex items-center justify-center shadow-lg">
+                      <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12h6m-6 4h6M9 8h6M7 4h10a2 2 0 012 2v12a2 2 0 01-2 2H7a2 2 0 01-2-2V6a2 2 0 012-2z"/></svg>
+                    </span>
+                    <div>
+                      <p className="text-xs font-bold text-purple-100">Assignments</p>
+                    </div>
+                  </div>
+                </a>
+                <a href="/pages/grades" className="flex-shrink-0 w-32 group relative bg-gradient-to-br from-orange-500/15 via-coral-500/15 to-orange-600/15 backdrop-blur-xl border border-orange-400/30 rounded-2xl p-4 hover:scale-105 transition-all duration-300 overflow-hidden">
+                  <div className="relative flex flex-col items-center space-y-2 text-center">
+                    <span className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center shadow-lg">
+                      <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 14l9-5-9-5-9 5 9 5z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 14l6.16-3.422A12.083 12.083 0 0112 21.5 12.083 12.083 0 015.84 10.578L12 14z"/></svg>
+                    </span>
+                    <div>
+                      <p className="text-xs font-bold text-orange-100">Grades</p>
+                    </div>
+                  </div>
+                </a>
+                <button className="flex-shrink-0 w-32 group relative bg-gradient-to-br from-lime-500/15 via-green-500/15 to-lime-600/15 backdrop-blur-xl border border-lime-400/30 rounded-2xl p-4 hover:scale-105 transition-all duration-300 overflow-hidden">
+                  <div className="relative flex flex-col items-center space-y-2 text-center">
+                    <span className="w-12 h-12 rounded-xl bg-gradient-to-br from-lime-400 to-green-500 flex items-center justify-center shadow-lg">
+                      <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                    </span>
+                    <p className="text-xs font-bold text-lime-100">Groups</p>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            {/* Desktop: Original grid */}
+            <div className="hidden lg:grid grid-cols-6 gap-4 animate-fade-in">
               <a href="/pages/routine" className="group relative bg-gradient-to-br from-teal-500/15 via-emerald-500/15 to-teal-600/15 backdrop-blur-xl border border-teal-400/30 rounded-3xl p-6 hover:scale-110 hover:rotate-1 hover:shadow-2xl hover:shadow-teal-500/40 transition-all duration-500 overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-teal-400/0 via-teal-400/20 to-teal-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-shimmer"></div>
                 <div className="absolute top-0 right-0 w-20 h-20 bg-teal-400/20 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-500"></div>
@@ -131,7 +185,7 @@ export default function Page() {
                   </div>
                 </div>
               </a>
-              <button className="group relative bg-gradient-to-br from-lime-500/15 via-green-500/15 to-lime-600/15 backdrop-blur-xl border border-lime-400/30 rounded-3xl p-6 hover:scale-110 hover:-rotate-1 hover:shadow-2xl hover:shadow-lime-500/40 transition-all duration-500 overflow-hidden hidden lg:block">
+              <button className="group relative bg-gradient-to-br from-lime-500/15 via-green-500/15 to-lime-600/15 backdrop-blur-xl border border-lime-400/30 rounded-3xl p-6 hover:scale-110 hover:-rotate-1 hover:shadow-2xl hover:shadow-lime-500/40 transition-all duration-500 overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-lime-400/0 via-lime-400/20 to-lime-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-shimmer"></div>
                 <div className="absolute top-0 right-0 w-20 h-20 bg-lime-400/20 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-500"></div>
                 <div className="relative flex flex-col items-center space-y-3 text-center">
@@ -165,46 +219,46 @@ export default function Page() {
           </section>
 
           {/* Grid: Center feed with right sidebar widgets */}
-          <section className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+          <section className="grid grid-cols-1 xl:grid-cols-3 gap-4 lg:gap-8 w-full">
             {/* Center Column (spans 2) */}
-            <div className="xl:col-span-2 space-y-8">
+            <div className="xl:col-span-2 space-y-4 lg:space-y-8 w-full min-w-0">
               <CommunityFeed />
             </div>
 
-            {/* Right Sidebar Widgets */}
-            <aside className="space-y-6">
+            {/* Right Sidebar Widgets - Simplified for mobile */}
+            <aside className="space-y-4 lg:space-y-6 w-full min-w-0">
               {/* Study Timer */}
-              <div className="group relative bg-gradient-to-br from-teal-500/10 via-emerald-500/10 to-teal-600/10 backdrop-blur-xl rounded-3xl p-6 border border-teal-400/20 shadow-2xl hover:shadow-teal-500/40 hover:scale-[1.02] transition-all duration-500 overflow-hidden">
-                <div className="absolute -top-20 -right-20 w-48 h-48 bg-teal-400/20 rounded-full blur-3xl group-hover:bg-teal-400/30 group-hover:scale-125 transition-all duration-700"></div>
-                <div className="absolute bottom-0 left-0 w-32 h-32 bg-emerald-400/10 rounded-full blur-2xl group-hover:bg-emerald-400/20 transition-all duration-700"></div>
+              <div className="group relative bg-gradient-to-br from-teal-500/10 via-emerald-500/10 to-teal-600/10 backdrop-blur-xl rounded-2xl lg:rounded-3xl p-4 lg:p-6 border border-teal-400/20 shadow-xl lg:shadow-2xl hover:shadow-teal-500/40 hover:scale-[1.02] transition-all duration-500 overflow-hidden">
+                <div className="hidden lg:block absolute -top-20 -right-20 w-48 h-48 bg-teal-400/20 rounded-full blur-3xl group-hover:bg-teal-400/30 group-hover:scale-125 transition-all duration-700"></div>
+                <div className="hidden lg:block absolute bottom-0 left-0 w-32 h-32 bg-emerald-400/10 rounded-full blur-2xl group-hover:bg-emerald-400/20 transition-all duration-700"></div>
                 <div className="relative">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-400 to-emerald-500 flex items-center justify-center shadow-xl group-hover:rotate-12 transition-all duration-500">
-                      <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  <div className="flex items-center gap-2 lg:gap-3 mb-3 lg:mb-4">
+                    <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-xl lg:rounded-2xl bg-gradient-to-br from-teal-400 to-emerald-500 flex items-center justify-center shadow-lg lg:shadow-xl group-hover:rotate-12 transition-all duration-500">
+                      <svg className="w-5 h-5 lg:w-6 lg:h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
-                    <h3 className="text-xl font-black bg-gradient-to-r from-teal-200 via-emerald-200 to-green-200 bg-clip-text text-transparent">Focus Timer</h3>
+                    <h3 className="text-base lg:text-xl font-black bg-gradient-to-r from-teal-200 via-emerald-200 to-green-200 bg-clip-text text-transparent">Focus Timer</h3>
                   </div>
                   <PomodoroClock />
                 </div>
               </div>
 
               {/* Today Calendar Snapshot */}
-              <div className="group relative bg-gradient-to-br from-purple-500/10 via-violet-500/10 to-purple-600/10 backdrop-blur-xl rounded-3xl p-6 border border-purple-400/20 shadow-2xl hover:shadow-purple-500/40 hover:scale-[1.02] transition-all duration-500 overflow-hidden">
-                <div className="absolute -top-20 -right-20 w-48 h-48 bg-purple-400/20 rounded-full blur-3xl group-hover:bg-purple-400/30 group-hover:scale-125 transition-all duration-700"></div>
-                <div className="absolute bottom-0 left-0 w-32 h-32 bg-violet-400/10 rounded-full blur-2xl group-hover:bg-violet-400/20 transition-all duration-700"></div>
+              <div className="group relative bg-gradient-to-br from-purple-500/10 via-violet-500/10 to-purple-600/10 backdrop-blur-xl rounded-2xl lg:rounded-3xl p-4 lg:p-6 border border-purple-400/20 shadow-xl lg:shadow-2xl hover:shadow-purple-500/40 hover:scale-[1.02] transition-all duration-500 overflow-hidden">
+                <div className="hidden lg:block absolute -top-20 -right-20 w-48 h-48 bg-purple-400/20 rounded-full blur-3xl group-hover:bg-purple-400/30 group-hover:scale-125 transition-all duration-700"></div>
+                <div className="hidden lg:block absolute bottom-0 left-0 w-32 h-32 bg-violet-400/10 rounded-full blur-2xl group-hover:bg-violet-400/20 transition-all duration-700"></div>
                 <div className="relative">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-400 to-violet-500 flex items-center justify-center shadow-xl group-hover:-rotate-12 transition-all duration-500">
-                      <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 7V3m8 4V3M3 11h18M5 19h14a2 2 0 002-2v-6H3v6a2 2 0 002 2z"/></svg>
+                  <div className="flex items-center gap-2 lg:gap-3 mb-3 lg:mb-4">
+                    <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-xl lg:rounded-2xl bg-gradient-to-br from-purple-400 to-violet-500 flex items-center justify-center shadow-lg lg:shadow-xl group-hover:-rotate-12 transition-all duration-500">
+                      <svg className="w-5 h-5 lg:w-6 lg:h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 7V3m8 4V3M3 11h18M5 19h14a2 2 0 002-2v-6H3v6a2 2 0 002 2z"/></svg>
                     </div>
-                    <h3 className="text-xl font-black bg-gradient-to-r from-purple-200 via-violet-200 to-fuchsia-200 bg-clip-text text-transparent">Today's Schedule</h3>
+                    <h3 className="text-base lg:text-xl font-black bg-gradient-to-r from-purple-200 via-violet-200 to-fuchsia-200 bg-clip-text text-transparent">Today's Schedule</h3>
                   </div>
                   <DailyCalendar />
                 </div>
               </div>
 
-              {/* Trending Tags */}
-              <div className="group relative bg-gradient-to-br from-orange-500/10 via-red-500/10 to-orange-600/10 backdrop-blur-xl rounded-3xl p-6 border border-orange-400/20 shadow-2xl hover:shadow-orange-500/40 hover:scale-[1.02] transition-all duration-500 overflow-hidden">
+              {/* Trending Tags - Hidden on mobile */}
+              <div className="hidden lg:block group relative bg-gradient-to-br from-orange-500/10 via-red-500/10 to-orange-600/10 backdrop-blur-xl rounded-3xl p-6 border border-orange-400/20 shadow-2xl hover:shadow-orange-500/40 hover:scale-[1.02] transition-all duration-500 overflow-hidden">
                 <div className="absolute -top-20 -right-20 w-48 h-48 bg-orange-400/20 rounded-full blur-3xl group-hover:bg-orange-400/30 group-hover:scale-125 transition-all duration-700"></div>
                 <div className="absolute bottom-0 left-0 w-32 h-32 bg-red-400/10 rounded-full blur-2xl group-hover:bg-red-400/20 transition-all duration-700"></div>
                 <div className="relative">
@@ -231,8 +285,8 @@ export default function Page() {
                 </div>
               </div>
 
-              {/* Community Stats */}
-              <div className="group relative bg-gradient-to-br from-lime-500/10 via-green-500/10 to-lime-600/10 backdrop-blur-xl rounded-3xl p-6 border border-lime-400/20 shadow-2xl hover:shadow-lime-500/40 hover:scale-[1.02] transition-all duration-500 overflow-hidden">
+              {/* Community Stats - Hidden on mobile */}
+              <div className="hidden lg:block group relative bg-gradient-to-br from-lime-500/10 via-green-500/10 to-lime-600/10 backdrop-blur-xl rounded-3xl p-6 border border-lime-400/20 shadow-2xl hover:shadow-lime-500/40 hover:scale-[1.02] transition-all duration-500 overflow-hidden">
                 <div className="absolute -top-20 -right-20 w-48 h-48 bg-lime-400/20 rounded-full blur-3xl group-hover:bg-lime-400/30 group-hover:scale-125 transition-all duration-700"></div>
                 <div className="absolute bottom-0 left-0 w-32 h-32 bg-green-400/10 rounded-full blur-2xl group-hover:bg-green-400/20 transition-all duration-700"></div>
                 <div className="relative">
@@ -261,6 +315,33 @@ export default function Page() {
             </aside>
           </section>
         </main>
+      </div>
+
+      {/* Mobile Bottom Navigation */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-950/95 backdrop-blur-xl border-t border-white/10">
+        <div className="flex justify-around items-center px-4 py-3">
+          <a href="/" className="flex flex-col items-center gap-1 text-teal-400">
+            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            <span className="text-xs font-bold">Home</span>
+          </a>
+          <a href="/pages/routine" className="flex flex-col items-center gap-1 text-gray-400 hover:text-teal-300 transition-colors">
+            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 7V3m8 4V3M3 11h18M5 19h14a2 2 0 002-2v-6H3v6a2 2 0 002 2z"/></svg>
+            <span className="text-xs font-bold">Routine</span>
+          </a>
+          <button className="flex flex-col items-center gap-1 -mt-6">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal-400 to-purple-500 flex items-center justify-center shadow-xl shadow-teal-500/40">
+              <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 4v16m8-8H4"/></svg>
+            </div>
+          </button>
+          <a href="/pages/assignments" className="flex flex-col items-center gap-1 text-gray-400 hover:text-purple-300 transition-colors">
+            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12h6m-6 4h6M9 8h6M7 4h10a2 2 0 012 2v12a2 2 0 01-2 2H7a2 2 0 01-2-2V6a2 2 0 012-2z"/></svg>
+            <span className="text-xs font-bold">Tasks</span>
+          </a>
+          <a href="/pages/profile" className="flex flex-col items-center gap-1 text-gray-400 hover:text-purple-300 transition-colors">
+            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+            <span className="text-xs font-bold">Profile</span>
+          </a>
+        </div>
       </div>
 
       {/* Authentication Modals */}

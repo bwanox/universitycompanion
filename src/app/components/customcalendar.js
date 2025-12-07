@@ -115,59 +115,61 @@ const CustomCalendar = ({ events, onAddEvent, onDayClick }) => {
   return (
     <div className="w-full">
       {/* Calendar Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-4">
-          <h3 className="text-2xl font-black text-white">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 lg:gap-0 mb-4 lg:mb-6">
+        <div className="flex items-center gap-2 lg:gap-4 flex-shrink-0">
+          <h3 className="text-lg lg:text-2xl font-black text-white truncate">
             {monthNames[currentMonth]} {currentYear}
           </h3>
           <button
             onClick={goToToday}
-            className="px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/30 rounded-xl text-sm font-bold text-white transition-all duration-300 hover:scale-105"
+            className="px-3 lg:px-4 py-1.5 lg:py-2 bg-white/10 hover:bg-white/20 border border-white/30 rounded-lg lg:rounded-xl text-xs lg:text-sm font-bold text-white transition-all duration-300 hover:scale-105 flex-shrink-0"
           >
             Today
           </button>
         </div>
         
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 lg:gap-3 w-full lg:w-auto overflow-x-auto no-scrollbar">
           {/* View Mode Toggle */}
-          <div className="flex gap-2 bg-white/10 backdrop-blur-sm border border-white/30 rounded-xl p-1">
+          <div className="flex gap-1 lg:gap-2 bg-white/10 backdrop-blur-sm border border-white/30 rounded-lg lg:rounded-xl p-0.5 lg:p-1 flex-shrink-0">
             <button
               onClick={() => setViewMode('month')}
-              className={`px-4 py-2 rounded-lg text-sm font-bold transition-all duration-300 ${
+              className={`px-2 lg:px-4 py-1.5 lg:py-2 rounded-md lg:rounded-lg text-xs lg:text-sm font-bold transition-all duration-300 whitespace-nowrap ${
                 viewMode === 'month'
                   ? 'bg-gradient-to-r from-purple-400 to-violet-500 text-white shadow-lg'
                   : 'text-white/70 hover:text-white'
               }`}
             >
-              📅 Month
+              <span className="hidden sm:inline">📅 Month</span>
+              <span className="sm:hidden">📅</span>
             </button>
             <button
               onClick={() => setViewMode('list')}
-              className={`px-4 py-2 rounded-lg text-sm font-bold transition-all duration-300 ${
+              className={`px-2 lg:px-4 py-1.5 lg:py-2 rounded-md lg:rounded-lg text-xs lg:text-sm font-bold transition-all duration-300 whitespace-nowrap ${
                 viewMode === 'list'
                   ? 'bg-gradient-to-r from-purple-400 to-violet-500 text-white shadow-lg'
                   : 'text-white/70 hover:text-white'
               }`}
             >
-              📋 List
+              <span className="hidden sm:inline">📋 List</span>
+              <span className="sm:hidden">📋</span>
             </button>
           </div>
 
           {/* Navigation */}
-          <div className="flex gap-2">
+          <div className="flex gap-1 lg:gap-2 flex-shrink-0">
             <button
               onClick={goToPreviousMonth}
-              className="w-10 h-10 bg-white/10 hover:bg-white/20 border border-white/30 rounded-xl flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
+              className="w-8 h-8 lg:w-10 lg:h-10 bg-white/10 hover:bg-white/20 border border-white/30 rounded-lg lg:rounded-xl flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
             >
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <svg className="w-4 h-4 lg:w-5 lg:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7"/>
               </svg>
             </button>
             <button
               onClick={goToNextMonth}
-              className="w-10 h-10 bg-white/10 hover:bg-white/20 border border-white/30 rounded-xl flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
+              className="w-8 h-8 lg:w-10 lg:h-10 bg-white/10 hover:bg-white/20 border border-white/30 rounded-lg lg:rounded-xl flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
             >
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <svg className="w-4 h-4 lg:w-5 lg:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7"/>
               </svg>
             </button>
@@ -176,24 +178,25 @@ const CustomCalendar = ({ events, onAddEvent, onDayClick }) => {
       </div>
 
       {viewMode === 'month' ? (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
           {/* Calendar Grid */}
           <div className="lg:col-span-2">
-            <div className="bg-white/5 backdrop-blur-sm border border-white/20 rounded-2xl p-4 overflow-hidden">
+            <div className="bg-white/5 backdrop-blur-sm border border-white/20 rounded-xl lg:rounded-2xl p-2 lg:p-4 overflow-hidden">
               {/* Day Headers */}
-              <div className="grid grid-cols-7 gap-2 mb-2">
+              <div className="grid grid-cols-7 gap-1 lg:gap-2 mb-1 lg:mb-2">
                 {dayNames.map((day, index) => (
                   <div
                     key={index}
-                    className="text-center py-3 text-sm font-black text-purple-300"
+                    className="text-center py-2 lg:py-3 text-xs lg:text-sm font-black text-purple-300"
                   >
-                    {day}
+                    <span className="hidden sm:inline">{day}</span>
+                    <span className="sm:hidden">{day.substring(0, 1)}</span>
                   </div>
                 ))}
               </div>
 
               {/* Calendar Days */}
-              <div className={`grid grid-cols-7 gap-2 transition-all duration-300 ${isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
+              <div className={`grid grid-cols-7 gap-1 lg:gap-2 transition-all duration-300 ${isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
                 {cells.map((cell, index) => {
                   const dateStr = formatDate(cell.date);
                   const eventsForDay = events.filter((ev) => ev.date === dateStr);
@@ -207,18 +210,18 @@ const CustomCalendar = ({ events, onAddEvent, onDayClick }) => {
                       onClick={() => onDayClick(dateStr, eventsForDay)}
                       disabled={!cell.currentMonth}
                       className={`
-                        relative aspect-square p-2 rounded-xl text-center transition-all duration-300 group
+                        relative aspect-square p-1 lg:p-2 rounded-lg lg:rounded-xl text-center transition-all duration-300 group
                         ${!cell.currentMonth 
                           ? 'text-white/20 cursor-default' 
                           : isPast
                           ? 'text-white/40 hover:bg-white/5 hover:text-white/60'
-                          : 'text-white hover:bg-white/15 hover:scale-110 cursor-pointer'
+                          : 'text-white hover:bg-white/15 hover:scale-105 lg:hover:scale-110 cursor-pointer'
                         }
                         ${isToday && cell.currentMonth
-                          ? 'bg-gradient-to-br from-purple-400 to-violet-500 text-white font-black shadow-xl ring-4 ring-purple-300/50 animate-pulse-slow'
+                          ? 'bg-gradient-to-br from-purple-400 to-violet-500 text-white font-black shadow-lg lg:shadow-xl ring-2 lg:ring-4 ring-purple-300/50 animate-pulse-slow'
                           : hasEvent && cell.currentMonth
-                          ? 'bg-gradient-to-br from-fuchsia-500/40 to-violet-500/40 border-2 border-fuchsia-400/50 font-bold shadow-lg shadow-fuchsia-500/20'
-                          : 'bg-white/5 hover:shadow-xl hover:shadow-purple-500/20'
+                          ? 'bg-gradient-to-br from-fuchsia-500/40 to-violet-500/40 border border-fuchsia-400/50 lg:border-2 font-bold shadow-md lg:shadow-lg shadow-fuchsia-500/20'
+                          : 'bg-white/5 hover:shadow-lg lg:hover:shadow-xl hover:shadow-purple-500/20'
                         }
                       `}
                       style={{ 
@@ -226,23 +229,23 @@ const CustomCalendar = ({ events, onAddEvent, onDayClick }) => {
                         animation: !isAnimating && cell.currentMonth ? 'fadeInScale 0.3s ease-out forwards' : 'none'
                       }}
                     >
-                      <div className="text-lg font-bold group-hover:scale-125 transition-transform duration-300">{cell.date.getDate()}</div>
+                      <div className="text-sm lg:text-lg font-bold group-hover:scale-110 lg:group-hover:scale-125 transition-transform duration-300">{cell.date.getDate()}</div>
                       {hasEvent && cell.currentMonth && (
                         <>
-                          <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 flex gap-1">
+                          <div className="absolute bottom-0.5 lg:bottom-1 left-1/2 transform -translate-x-1/2 flex gap-0.5 lg:gap-1">
                             {eventsForDay.slice(0, 3).map((_, i) => (
                               <div
                                 key={i}
-                                className="w-1.5 h-1.5 rounded-full bg-fuchsia-300 animate-pulse shadow-lg shadow-fuchsia-500/50"
+                                className="w-1 h-1 lg:w-1.5 lg:h-1.5 rounded-full bg-fuchsia-300 animate-pulse shadow-sm lg:shadow-lg shadow-fuchsia-500/50"
                                 style={{ animationDelay: `${i * 200}ms` }}
                               />
                             ))}
                           </div>
-                          <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-400/0 via-fuchsia-400/20 to-violet-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
+                          <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-400/0 via-fuchsia-400/20 to-violet-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg lg:rounded-xl pointer-events-none"></div>
                         </>
                       )}
                       {eventsForDay.length > 3 && cell.currentMonth && (
-                        <div className="absolute top-1 right-1 text-xs font-black text-fuchsia-200 bg-fuchsia-500/50 px-1.5 py-0.5 rounded-full animate-bounce-slow">
+                        <div className="absolute top-0.5 lg:top-1 right-0.5 lg:right-1 text-[10px] lg:text-xs font-black text-fuchsia-200 bg-fuchsia-500/50 px-1 lg:px-1.5 py-0.5 rounded-full animate-bounce-slow">
                           +{eventsForDay.length - 3}
                         </div>
                       )}
@@ -253,31 +256,31 @@ const CustomCalendar = ({ events, onAddEvent, onDayClick }) => {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 mt-4">
-              <div className="bg-gradient-to-br from-purple-500/20 to-violet-500/20 backdrop-blur-sm border border-purple-400/30 rounded-2xl p-4 text-center">
-                <div className="text-3xl font-black text-white">{eventsThisMonth.length}</div>
-                <div className="text-sm text-purple-200 font-semibold mt-1">This Month</div>
+            <div className="grid grid-cols-3 gap-2 lg:gap-4 mt-3 lg:mt-4">
+              <div className="bg-gradient-to-br from-purple-500/20 to-violet-500/20 backdrop-blur-sm border border-purple-400/30 rounded-xl lg:rounded-2xl p-3 lg:p-4 text-center">
+                <div className="text-2xl lg:text-3xl font-black text-white">{eventsThisMonth.length}</div>
+                <div className="text-xs lg:text-sm text-purple-200 font-semibold mt-0.5 lg:mt-1">This Month</div>
               </div>
-              <div className="bg-gradient-to-br from-fuchsia-500/20 to-pink-500/20 backdrop-blur-sm border border-fuchsia-400/30 rounded-2xl p-4 text-center">
-                <div className="text-3xl font-black text-white">{upcomingEvents.length}</div>
-                <div className="text-sm text-fuchsia-200 font-semibold mt-1">Upcoming</div>
+              <div className="bg-gradient-to-br from-fuchsia-500/20 to-pink-500/20 backdrop-blur-sm border border-fuchsia-400/30 rounded-xl lg:rounded-2xl p-3 lg:p-4 text-center">
+                <div className="text-2xl lg:text-3xl font-black text-white">{upcomingEvents.length}</div>
+                <div className="text-xs lg:text-sm text-fuchsia-200 font-semibold mt-0.5 lg:mt-1">Upcoming</div>
               </div>
-              <div className="bg-gradient-to-br from-violet-500/20 to-purple-500/20 backdrop-blur-sm border border-violet-400/30 rounded-2xl p-4 text-center">
-                <div className="text-3xl font-black text-white">{events.length}</div>
-                <div className="text-sm text-violet-200 font-semibold mt-1">Total</div>
+              <div className="bg-gradient-to-br from-violet-500/20 to-purple-500/20 backdrop-blur-sm border border-violet-400/30 rounded-xl lg:rounded-2xl p-3 lg:p-4 text-center">
+                <div className="text-2xl lg:text-3xl font-black text-white">{events.length}</div>
+                <div className="text-xs lg:text-sm text-violet-200 font-semibold mt-0.5 lg:mt-1">Total</div>
               </div>
             </div>
           </div>
 
           {/* Upcoming Events Sidebar */}
-          <div className="bg-white/5 backdrop-blur-sm border border-white/20 rounded-2xl p-5 h-fit max-h-[600px] overflow-y-auto">
-            <h4 className="text-lg font-black text-white mb-4 flex items-center gap-2">
-              <span className="text-2xl">⏰</span>
-              Upcoming Assignments
+          <div className="bg-white/5 backdrop-blur-sm border border-white/20 rounded-xl lg:rounded-2xl p-4 lg:p-5 h-fit max-h-[400px] lg:max-h-[600px] overflow-y-auto">
+            <h4 className="text-base lg:text-lg font-black text-white mb-3 lg:mb-4 flex items-center gap-2">
+              <span className="text-xl lg:text-2xl">⏰</span>
+              <span className="truncate">Upcoming Assignments</span>
             </h4>
             
             {upcomingEvents.length > 0 ? (
-              <div className="space-y-3">
+              <div className="space-y-2 lg:space-y-3">
                 {upcomingEvents.map((event, index) => {
                   const eventDate = new Date(event.date);
                   const daysUntil = Math.ceil((eventDate - today) / (1000 * 60 * 60 * 24));
@@ -287,7 +290,7 @@ const CustomCalendar = ({ events, onAddEvent, onDayClick }) => {
                   return (
                     <div
                       key={event.id}
-                      className={`p-4 rounded-xl border transition-all duration-300 hover:scale-105 cursor-pointer ${
+                      className={`p-3 lg:p-4 rounded-lg lg:rounded-xl border transition-all duration-300 hover:scale-105 cursor-pointer ${
                         isUrgent
                           ? 'bg-gradient-to-br from-red-500/20 to-pink-500/20 border-red-400/40 hover:border-red-400/60'
                           : isThisWeek
@@ -296,8 +299,8 @@ const CustomCalendar = ({ events, onAddEvent, onDayClick }) => {
                       }`}
                       onClick={() => onDayClick(event.date, [event])}
                     >
-                      <div className="flex items-start justify-between mb-2">
-                        <span className={`text-xs font-black px-2 py-1 rounded-lg ${
+                      <div className="flex items-start justify-between mb-1.5 lg:mb-2">
+                        <span className={`text-[10px] lg:text-xs font-black px-1.5 lg:px-2 py-0.5 lg:py-1 rounded-md lg:rounded-lg ${
                           isUrgent
                             ? 'bg-red-500/30 text-red-200'
                             : isThisWeek
@@ -306,33 +309,33 @@ const CustomCalendar = ({ events, onAddEvent, onDayClick }) => {
                         }`}>
                           {daysUntil === 0 ? 'TODAY' : daysUntil === 1 ? 'TOMORROW' : `${daysUntil} DAYS`}
                         </span>
-                        <span className="text-xs text-white/60 font-semibold">
+                        <span className="text-[10px] lg:text-xs text-white/60 font-semibold">
                           {eventDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                         </span>
                       </div>
-                      <p className="text-sm font-bold text-white line-clamp-2">{event.title}</p>
+                      <p className="text-xs lg:text-sm font-bold text-white line-clamp-2">{event.title}</p>
                     </div>
                   );
                 })}
               </div>
             ) : (
-              <div className="text-center py-12">
-                <div className="text-5xl mb-3 opacity-50">🎉</div>
-                <p className="text-white/60 text-sm font-semibold">No upcoming assignments</p>
+              <div className="text-center py-8 lg:py-12">
+                <div className="text-4xl lg:text-5xl mb-2 lg:mb-3 opacity-50">🎉</div>
+                <p className="text-white/60 text-xs lg:text-sm font-semibold">No upcoming assignments</p>
               </div>
             )}
           </div>
         </div>
       ) : (
         // List View
-        <div className="bg-white/5 backdrop-blur-sm border border-white/20 rounded-2xl p-6">
-          <h4 className="text-xl font-black text-white mb-6 flex items-center gap-2">
-            <span className="text-2xl">📋</span>
-            All Assignments for {monthNames[currentMonth]} {currentYear}
+        <div className="bg-white/5 backdrop-blur-sm border border-white/20 rounded-xl lg:rounded-2xl p-4 lg:p-6">
+          <h4 className="text-lg lg:text-xl font-black text-white mb-4 lg:mb-6 flex items-center gap-2">
+            <span className="text-xl lg:text-2xl">📋</span>
+            <span className="truncate">All Assignments for {monthNames[currentMonth]} {currentYear}</span>
           </h4>
           
           {eventsThisMonth.length > 0 ? (
-            <div className="space-y-3">
+            <div className="space-y-2 lg:space-y-3">
               {eventsThisMonth.map((event) => {
                 const eventDate = new Date(event.date);
                 const isPast = eventDate < today;
@@ -341,7 +344,7 @@ const CustomCalendar = ({ events, onAddEvent, onDayClick }) => {
                 return (
                   <div
                     key={event.id}
-                    className={`p-5 rounded-2xl border transition-all duration-300 hover:scale-102 cursor-pointer ${
+                    className={`p-4 lg:p-5 rounded-xl lg:rounded-2xl border transition-all duration-300 hover:scale-102 cursor-pointer ${
                       isPast
                         ? 'bg-white/5 border-white/20 opacity-50'
                         : isToday
@@ -350,10 +353,10 @@ const CustomCalendar = ({ events, onAddEvent, onDayClick }) => {
                     }`}
                     onClick={() => onDayClick(event.date, [event])}
                   >
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <p className="text-lg font-bold text-white mb-1">{event.title}</p>
-                        <p className="text-sm text-white/70 font-semibold">
+                    <div className="flex items-start gap-3 justify-between">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-base lg:text-lg font-bold text-white mb-1 truncate">{event.title}</p>
+                        <p className="text-xs lg:text-sm text-white/70 font-semibold truncate">
                           {eventDate.toLocaleDateString('en-US', { 
                             weekday: 'long', 
                             month: 'long', 
@@ -362,25 +365,27 @@ const CustomCalendar = ({ events, onAddEvent, onDayClick }) => {
                           })}
                         </p>
                       </div>
-                      {isToday && (
-                        <span className="px-3 py-1 bg-purple-500/40 border border-purple-400/50 rounded-full text-xs font-black text-purple-200">
-                          TODAY
-                        </span>
-                      )}
-                      {isPast && (
-                        <span className="px-3 py-1 bg-white/10 border border-white/20 rounded-full text-xs font-black text-white/50">
-                          PAST
-                        </span>
-                      )}
+                      <div className="flex-shrink-0">
+                        {isToday && (
+                          <span className="px-2 lg:px-3 py-0.5 lg:py-1 bg-purple-500/40 border border-purple-400/50 rounded-full text-[10px] lg:text-xs font-black text-purple-200">
+                            TODAY
+                          </span>
+                        )}
+                        {isPast && (
+                          <span className="px-2 lg:px-3 py-0.5 lg:py-1 bg-white/10 border border-white/20 rounded-full text-[10px] lg:text-xs font-black text-white/50">
+                            PAST
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                 );
               })}
             </div>
           ) : (
-            <div className="text-center py-20">
-              <div className="text-6xl mb-4 opacity-50">📭</div>
-              <p className="text-white/60 text-lg font-semibold">No assignments this month</p>
+            <div className="text-center py-12 lg:py-20">
+              <div className="text-5xl lg:text-6xl mb-3 lg:mb-4 opacity-50">📭</div>
+              <p className="text-white/60 text-base lg:text-lg font-semibold">No assignments this month</p>
             </div>
           )}
         </div>
