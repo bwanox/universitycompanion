@@ -14,12 +14,11 @@ import {
 } from "firebase/firestore";
 import Tesseract from "tesseract.js"; // OCR library
 import * as pdfjsLib from "pdfjs-dist";
-import pdfWorker from "pdfjs-dist/build/pdf.worker.mjs";
 
 // Set up PDF.js worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = URL.createObjectURL(
-  new Blob([pdfWorker], { type: "application/javascript" })
-);
+if (typeof window !== "undefined") {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
+}
 
 export const useGrades = () => {
   const [grades, setGrades] = useState([]);
