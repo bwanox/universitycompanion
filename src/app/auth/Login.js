@@ -7,11 +7,10 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { useAuth } from "../auth/AuthContext";
 import NeonLoader from "../components/NeonLoader"; // Import the NeonLoader component
 
-const Login = ({ onClose, onSuccess }) => { // Accept onClose and onSuccess props
+const Login = ({ onClose, onSuccess, onShowSuccess }) => { // Accept onClose, onSuccess, and onShowSuccess props
   const router = useRouter();
   const { user } = useAuth();
 
-  // Login state
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -23,6 +22,9 @@ const Login = ({ onClose, onSuccess }) => { // Accept onClose and onSuccess prop
 
   // Loading state for login verification
   const [isLoading, setIsLoading] = useState(false);
+
+  // Password visibility toggle
+  const [showPassword, setShowPassword] = useState(false);
 
   // Close modal handler
   const handleClose = () => {
@@ -71,7 +73,11 @@ const Login = ({ onClose, onSuccess }) => { // Accept onClose and onSuccess prop
       await signInWithEmailAndPassword(auth, emailToLogin, password);
       setIdentifier("");
       setPassword("");
-      alert("Login successful!");
+      
+      // Show success notification
+      if (onShowSuccess) {
+        onShowSuccess("Login successful! Welcome back.");
+      }
       
       // Call onSuccess if provided, otherwise fallback to redirect
       if (onSuccess) {
@@ -109,74 +115,116 @@ const Login = ({ onClose, onSuccess }) => { // Accept onClose and onSuccess prop
   }, [user, onClose]);
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg relative">
+    <div className="relative">
       {/* Close button - positioned at top right */}
       <button
         onClick={handleClose}
-        className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 focus:outline-none"
+        className="absolute -top-2 -right-2 z-10 w-10 h-10 bg-gradient-to-br from-red-500 to-pink-600 rounded-full flex items-center justify-center text-white hover:scale-110 transition-transform duration-300 shadow-lg"
         aria-label="Close"
       >
-        <svg
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M6 18L18 6M6 6l12 12"
-          />
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
 
       {!isForgotPassword ? (
         <>
-          <h2 className="text-2xl font-semibold text-blue-600 mb-4">Login</h2>
-          {error && <p className="text-red-500 mb-4">{error}</p>}
+          {/* Header with gradient */}
+          <div className="text-center mb-6">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-teal-400 to-purple-500 flex items-center justify-center shadow-xl">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+            </div>
+            <h2 className="text-3xl font-black bg-gradient-to-r from-teal-600 to-purple-600 bg-clip-text text-transparent mb-2">Welcome Back</h2>
+            <p className="text-gray-600">Sign in to continue your journey</p>
+          </div>
+
+          {error && (
+            <div className="mb-4 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg">
+              <p className="text-red-700 text-sm font-semibold">{error}</p>
+            </div>
+          )}
+
           {isLoading ? (
             <div className="flex justify-center items-center py-10">
               <NeonLoader />
             </div>
           ) : (
-            <form onSubmit={handleLoginSubmit}>
-              <div className="mb-4">
-                <label htmlFor="identifier" className="block text-gray-700">
-                  Email, Username or Phone Number
+            <form onSubmit={handleLoginSubmit} className="space-y-5">
+              <div>
+                <label htmlFor="identifier" className="block text-sm font-bold text-gray-700 mb-2">
+                  Email, Username or Phone
                 </label>
-                <input
-                  type="text"
-                  id="identifier"
-                  value={identifier}
-                  onChange={(e) => setIdentifier(e.target.value)}
-                  required
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-800"
-                />
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
+                    </svg>
+                  </div>
+                  <input
+                    type="text"
+                    id="identifier"
+                    value={identifier}
+                    onChange={(e) => setIdentifier(e.target.value)}
+                    required
+                    className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-200 text-gray-800 transition-all duration-300"
+                    placeholder="Enter your email, username or phone"
+                  />
+                </div>
               </div>
-              <div className="mb-4">
-                <label htmlFor="password" className="block text-gray-700">
+
+              <div>
+                <label htmlFor="password" className="block text-sm font-bold text-gray-700 mb-2">
                   Password
                 </label>
-                <input
-                  type="password"
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-700"
-                />
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                    </svg>
+                  </div>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="w-full pl-10 pr-10 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 text-gray-800 transition-all duration-300"
+                    placeholder="Enter your password"
+                  />
+                  <button
+                    type="button"
+                    tabIndex={-1}
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-purple-600 focus:outline-none"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? (
+                      // Eye-off icon
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-5 0-9-4-9-7s4-7 9-7c1.657 0 3.216.41 4.563 1.125M19.07 19.07l-14.14-14.14M9.88 9.88a3 3 0 104.24 4.24" />
+                      </svg>
+                    ) : (
+                      // Eye icon
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm7 0c0 3-4 7-10 7S2 15 2 12s4-7 10-7 10 4 10 7z" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
               </div>
+
               <button
                 type="submit"
-                className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full py-3.5 bg-gradient-to-r from-teal-500 to-purple-600 text-white font-bold rounded-xl hover:from-teal-600 hover:to-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-300 transform hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-xl"
               >
-                Login
+                Sign In
               </button>
             </form>
           )}
-          <div className="mt-4 text-center">
+
+          <div className="mt-6 text-center">
             <a
               href="#"
               onClick={(e) => {
@@ -185,39 +233,68 @@ const Login = ({ onClose, onSuccess }) => { // Accept onClose and onSuccess prop
                 setError("");
                 setMessage("");
               }}
-              className="text-blue-600 hover:underline"
+              className="text-sm font-semibold text-purple-600 hover:text-purple-700 hover:underline transition-colors"
             >
-              Forgot Password?
+              Forgot your password?
             </a>
           </div>
         </>
       ) : (
         <>
-          <h2 className="text-2xl font-semibold text-blue-600 mb-4">Reset Password</h2>
-          {error && <p className="text-red-500 mb-4">{error}</p>}
-          {message && <p className="text-green-500 mb-4">{message}</p>}
-          <form onSubmit={handleResetPassword}>
-            <div className="mb-4">
-              <label htmlFor="resetEmail" className="block text-gray-700">
-                Enter your Email
-              </label>
-              <input
-                type="email"
-                id="resetEmail"
-                value={resetEmail}
-                onChange={(e) => setResetEmail(e.target.value)}
-                required
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-800"
-              />
+          {/* Reset Password Header */}
+          <div className="text-center mb-6">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center shadow-xl">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+              </svg>
             </div>
+            <h2 className="text-3xl font-black bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-2">Reset Password</h2>
+            <p className="text-gray-600">We'll send you a reset link</p>
+          </div>
+
+          {error && (
+            <div className="mb-4 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg">
+              <p className="text-red-700 text-sm font-semibold">{error}</p>
+            </div>
+          )}
+          {message && (
+            <div className="mb-4 p-4 bg-green-50 border-l-4 border-green-500 rounded-lg">
+              <p className="text-green-700 text-sm font-semibold">{message}</p>
+            </div>
+          )}
+
+          <form onSubmit={handleResetPassword} className="space-y-5">
+            <div>
+              <label htmlFor="resetEmail" className="block text-sm font-bold text-gray-700 mb-2">
+                Email Address
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                  </svg>
+                </div>
+                <input
+                  type="email"
+                  id="resetEmail"
+                  value={resetEmail}
+                  onChange={(e) => setResetEmail(e.target.value)}
+                  required
+                  className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200 text-gray-800 transition-all duration-300"
+                  placeholder="Enter your email address"
+                />
+              </div>
+            </div>
+
             <button
               type="submit"
-              className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full py-3.5 bg-gradient-to-r from-orange-500 to-red-600 text-white font-bold rounded-xl hover:from-orange-600 hover:to-red-700 focus:outline-none focus:ring-4 focus:ring-orange-300 transform hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               Send Reset Link
             </button>
           </form>
-          <div className="mt-4 text-center">
+
+          <div className="mt-6 text-center">
             <a
               href="#"
               onClick={(e) => {
@@ -225,9 +302,9 @@ const Login = ({ onClose, onSuccess }) => { // Accept onClose and onSuccess prop
                 setIsForgotPassword(false);
                 setMessage("");
               }}
-              className="text-blue-600 hover:underline"
+              className="text-sm font-semibold text-orange-600 hover:text-orange-700 hover:underline transition-colors"
             >
-              Back to Login
+              ← Back to Login
             </a>
           </div>
         </>

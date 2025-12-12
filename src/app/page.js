@@ -16,6 +16,8 @@ export default function Page() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showAccountCreation, setShowAccountCreation] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
 
   // Get user and loading state from your AuthContext
   const { user, loading } = useAuth();
@@ -50,6 +52,14 @@ export default function Page() {
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+  };
+
+  const handleShowSuccess = (message) => {
+    setSuccessMessage(message);
+    setShowSuccess(true);
+    setTimeout(() => {
+      setShowSuccess(false);
+    }, 4000);
   };
 
   return (
@@ -344,6 +354,27 @@ export default function Page() {
         </div>
       </div>
 
+      {/* Success Notification */}
+      {showSuccess && (
+        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-[10001] animate-slide-down">
+          <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 min-w-[300px] max-w-md">
+            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <div className="flex-1">
+              <p className="font-bold text-sm">{successMessage}</p>
+            </div>
+            <button onClick={() => setShowSuccess(false)} className="text-white/80 hover:text-white">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Authentication Modals */}
       {!isLoggedIn && (
         <>
@@ -353,6 +384,7 @@ export default function Page() {
                 <AccountCreation
                   onClose={() => setShowAccountCreation(false)}
                   onSuccess={handleAccountCreationSuccess}
+                  onShowSuccess={handleShowSuccess}
                 />
               </div>
             </div>
@@ -364,6 +396,7 @@ export default function Page() {
                 <Login
                   onClose={() => setShowLogin(false)}
                   onSuccess={handleLoginSuccess}
+                  onShowSuccess={handleShowSuccess}
                 />
               </div>
             </div>
