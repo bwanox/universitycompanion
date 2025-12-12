@@ -177,12 +177,11 @@ const RoutineTracker = () => {
     
     // Check for conflicts
     const conflicts = tasks.filter((task) => {
+      if (!task.startTime || !task.endTime) return false;
       const taskStart = new Date(task.startTime.seconds ? task.startTime.toDate() : task.startTime);
       const taskEnd = new Date(task.endTime.seconds ? task.endTime.toDate() : task.endTime);
-      
       // Check if task is on the same day
       if (taskStart.toDateString() !== selectedDate.toDateString()) return false;
-      
       // Check if time ranges overlap
       return (
         (taskStartTime >= taskStart && taskStartTime < taskEnd) ||

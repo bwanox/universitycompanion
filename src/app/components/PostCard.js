@@ -43,6 +43,7 @@ const PostCard = ({ post }) => {
   const [newComment, setNewComment] = useState("");
   const [showComments, setShowComments] = useState(false);
   const [isLiked, setIsLiked] = useState(post.likes.includes(user?.uid));
+  const [likeCount, setLikeCount] = useState(post.likes?.length || 0);
   const { toggleLike, addComment, isProcessing } = usePostActions(post.id);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
@@ -60,7 +61,8 @@ const PostCard = ({ post }) => {
       return;
     }
     await toggleLike(user, isLiked);
-    setIsLiked(!isLiked);
+    setIsLiked((prev) => !prev);
+    setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1));
   };
 
   const handleComment = async (e) => {
@@ -163,7 +165,7 @@ const PostCard = ({ post }) => {
                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
               />
             </svg>
-            <span className="text-sm lg:text-base">{post.likes?.length || 0}</span>
+            <span className="text-sm lg:text-base">{likeCount}</span>
           </button>
           <button
             onClick={() => setShowComments(!showComments)}
