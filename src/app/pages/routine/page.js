@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { Rnd } from "react-rnd"; // Draggable & resizable calendar
+import { Rnd } from "react-rnd";
 import { useAuth } from "../../auth/AuthContext";
 import useRoutine from "../../hooks/useRoutine";
 import DailyCalendar from "../../components/DailyCalendar";

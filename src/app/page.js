@@ -348,8 +348,8 @@ export default function Page() {
       {!isLoggedIn && (
         <>
           {showAccountCreation && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
-              <div className="bg-white rounded-3xl p-12 shadow-2xl max-w-lg w-full border border-gray-300">
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-[10000] p-4">
+              <div className="bg-white rounded-2xl lg:rounded-3xl p-6 lg:p-12 shadow-2xl max-w-lg w-full border border-gray-300 mx-4 my-auto max-h-[90vh] overflow-y-auto">
                 <AccountCreation
                   onClose={() => setShowAccountCreation(false)}
                   onSuccess={handleAccountCreationSuccess}
@@ -359,8 +359,8 @@ export default function Page() {
           )}
 
           {showLogin && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
-              <div className="bg-white rounded-3xl p-12 shadow-2xl max-w-lg w-full border border-gray-300">
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-[10000] p-4">
+              <div className="bg-white rounded-2xl lg:rounded-3xl p-6 lg:p-12 shadow-2xl max-w-lg w-full border border-gray-300 mx-4 my-auto max-h-[90vh] overflow-y-auto">
                 <Login
                   onClose={() => setShowLogin(false)}
                   onSuccess={handleLoginSuccess}
